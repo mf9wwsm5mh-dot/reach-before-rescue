@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reach Before Rescue — Proposal Tracker</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #f1f5f9; } ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    textarea { font-family: inherit; }
+    .chip { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid; }
+    .chip-amber { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .chip-blue { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .chip-green { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; padding: 10px 16px; }
+    .btn-primary { background: #4f46e5; color: white; } .btn-primary:hover { background: #4338ca; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-outline { background: white; color: #374151; border: 1px solid #d1d5db; } .btn-outline:hover { border-color: #9ca3af; }
+    .btn-sm { font-size: 11px; padding: 4px 10px; border-radius: 999px; cursor: pointer; border: 1px solid; background: white; transition: all 0.15s; }
+    .progress-bar { height: 6px; background: #374151; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #4ade80; border-radius: 3px; transition: width 0.4s ease; }
+    .stat-box { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 14px; text-align: center; }
+    .stat-num { font-size: 16px; font-weight: 700; }
+    .stat-label { font-size: 11px; opacity: 0.6; }
+    .section-card { background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 10px; }
+    .section-card.done { border-color: #bbf7d0; }
+    .section-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: none; border: none; cursor: pointer; text-align: left; transition: background 0.1s; }
+    .section-header:hover { background: #f9fafb; }
+    .item-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; cursor: pointer; border-top: 1px solid #f3f4f6; transition: background 0.1s; }
+    .item-row:hover { background: #f9fafb; }
+    .item-row.active { background: #eef2ff; border-left: 3px solid #6366f1; }
+    .item-row.done-item { opacity: 0.5; }
+    .panel { position: fixed; right: 0; top: 0; height: 100%; width: 420px; background: white; border-left: 1px solid #e5e7eb; box-shadow: -4px 0 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; z-index: 50; }
+    .panel-header { background: #111827; color: white; padding: 16px 18px; flex-shrink: 0; }
+    .panel-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
+    .panel-footer { border-top: 1px solid #e5e7eb; padding: 14px 18px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .desc-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+    .q-label { font-size: 12px; font-weight: 600; color: #374151; display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+    .q-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #e0e7ff; color: #4338ca; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    textarea.answer { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #1f2937; resize: none; outline: none; transition: border 0.15s; }
+    textarea.answer:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(129,140,248,0.15); }
+    textarea.answer::placeholder { color: #d1d5db; }
+    input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #16a34a; }
+    .filter-bar { background: white; border-bottom: 1px solid #e5e7eb; padding: 8px 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .section-list { max-width: 740px; margin: 0 auto; padding: 20px 20px 60px; }
+    .main { flex: 1; overflow-y: auto; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useCallback, useRef } = React;
+
+const SECTIONS = [
+  {
+    id: 1, title: "Executive Summary", icon: "📋",
+    desc: "One-page distillation — written last, placed first. Every word must earn its place.",
+    items: [
+      { text: "Problem statement (2–3 sentences)", type: "develop", description: "The hook. A razor-sharp articulation of why NZ's current SAR system is inadequate and what is at stake. This is the first thing a minister or senior official reads — it must create immediate urgency and emotional resonance without overstating.", questions: ["In one sentence, what is the single biggest failure of NZ's current SAR system?", "What is the human cost of this failure — lives lost, delayed rescues, critical injuries?", "What opportunity is currently being missed that drones could address?"] },
+      { text: "Proposed solution overview", type: "develop", description: "A concise, plain-language description of the drone-assisted SAR system — what it does, how it works, and why it is the right solution. Must be understood by a non-technical reader in under 60 seconds. No jargon.", questions: ["What are the two or three core functions of the proposed drone system (e.g. detection, aid delivery, comms relay)?", "How does the system work alongside existing SAR teams rather than replacing them?", "What makes this approach uniquely suited to New Zealand's terrain and conditions?"] },
+      { text: "Key evidence / POD improvement stat", type: "research", description: "The single most compelling data point in the entire proposal — the headline number that proves this works. Probability of Detection (POD) improvement or time-to-rescue reduction. This stat will be quoted in every meeting, so it must be bulletproof.", questions: ["Do you have any existing POD improvement data from simulations, field tests, or international programs?", "What is the estimated or targeted POD improvement that drone-assisted SAR delivers?", "What is the source of this data — modelled, field-tested, or drawn from international precedents?"] },
+      { text: "Funding ask and expected impact", type: "develop", description: "Clear, specific statement of how much funding is requested, what it will be used for, and what measurable outcomes the government will see in return. Vague asks get rejected — specificity signals credibility.", questions: ["What is the approximate total funding amount being requested?", "What will the funding be used for at a high level (hardware, pilot program, certification, personnel)?", "What specific, measurable outcomes will the government see within the first 12–24 months?"] }
+    ]
+  },
+  {
+    id: 2, title: "The Problem", icon: "⚠️",
+    desc: "Establish urgency. Decision-makers must feel the gap before they'll fund the solution.",
+    items: [
+      { text: "NZ SAR incident statistics (frequency, fatalities, outcomes)", type: "research", description: "Hard data establishing the scale and urgency of the problem. Decision-makers need numbers — how often SAR is activated, how many lives are at risk, and how often outcomes are preventably poor. Without this, the problem feels abstract.", questions: ["What is the approximate annual number of SAR activations in NZ (overall and in high-risk regions)?", "How many fatalities or critical injuries occur per year in SAR-relevant incidents?", "Are there specific regions or activity types (tramping, alpine, water) that dominate the statistics?"] },
+      { text: "Cost of helicopter deployments per mission", type: "research", description: "Establishes the economic baseline that drones will be compared against throughout the proposal. This figure is the anchor of the economic case and must be sourced from official NZ data — not estimates.", questions: ["What is the per-hour or per-mission cost of helicopter SAR operations in NZ?", "How many helicopter SAR hours are deployed annually across NZ?", "Are there specific regional cost figures available (e.g. Queenstown / Otago SAR operations)?"] },
+      { text: "Documented cases where faster detection could have saved lives", type: "research", description: "Narrative evidence — real incidents that put a human face on the problem. A single compelling case study is often more persuasive to policymakers than a page of statistics. Must be handled with sensitivity.", questions: ["Are there specific NZ SAR incidents where delayed detection led to a fatality or serious harm?", "What is the typical delay between a person going missing and the first aerial search arriving on scene?", "Are there coroner's reports, official reviews, or media-documented incidents that highlight detection delays?"] },
+      { text: "Weather/terrain limitations on current SAR operations", type: "research", description: "Documents the physical constraints that ground or delay helicopter operations — the exact conditions where drones provide a clear, demonstrable advantage. This is where the 'force multiplier' argument begins.", questions: ["What specific weather conditions typically prevent or delay helicopter SAR in NZ mountain regions?", "What terrain types create blind spots or access difficulties for aerial SAR (valleys, dense bush, steep faces)?", "How frequently are SAR operations delayed due to weather in high-priority regions like Queenstown or the Southern Alps?"] },
+      { text: "Average response time benchmarks for NZ SAR", type: "research", description: "The current baseline response time — the central metric drones can improve. This is a critical comparison point throughout the proposal and must be sourced from reliable NZ data rather than assumed.", questions: ["What is the typical time from emergency call to first aerial search unit on scene in NZ?", "How does response time vary by region (urban vs. remote vs. alpine)?", "What is the critical survival window — the timeframe within which detection dramatically improves outcomes for subjects in distress?"] },
+      { text: "Gap analysis: what helicopters and ground teams cannot do", type: "develop", description: "A structured analysis of capability gaps that positions drones as the logical complement. Must be framed carefully — it is not a criticism of existing SAR teams, but an honest assessment of physical and operational limits.", questions: ["What specific tasks can drones perform that helicopters and ground teams physically cannot?", "What operational scenarios most clearly expose the limitations of current SAR methods?", "How do drones fill these gaps without disrupting or undermining existing operations?"] }
+    ]
+  },
+  {
+    id: 3, title: "The Solution — Drone-Assisted SAR", icon: "🚁",
+    desc: "Position the system clearly as a force multiplier — not a replacement for existing teams.",
+    items: [
+      { text: "System overview: aerial detection + micro-aid delivery", type: "develop", description: "The technical heart of the proposal explained in plain language. A non-technical minister must be able to explain this system to a colleague after reading this section.", questions: ["What type of drone platform is envisioned (fixed-wing, multi-rotor, hybrid) and why?", "What are the two core functions — detection and delivery — and how do they work together in a mission?", "What does a successful drone SAR deployment look like from start to finish in plain terms?"] },
+      { text: "RGB anomaly detection explanation (non-technical language)", type: "develop", description: "A plain-English explanation of how the drone identifies a missing person using colour and visual anomaly detection. Essential for non-technical decision-makers. Avoid all technical jargon here.", questions: ["How does RGB anomaly detection work in simple, everyday terms a non-technical person would understand?", "What visual signatures does the system look for — clothing colour, contrast against terrain, movement?", "What are the realistic detection range, accuracy, and false-positive parameters?"] },
+      { text: "Micro-aid drop vs tether delivery — comparison and rationale", type: "develop", description: "A clear comparison of the two delivery mechanisms with a recommendation. Decision-makers want to see that options have been evaluated — not just one approach assumed.", questions: ["What are the key practical differences between drop delivery and tether delivery in a SAR scenario?", "Which scenarios favour drop delivery vs tether (terrain, wind, subject condition)?", "What is your recommended primary delivery mechanism and why?"] },
+      { text: "How drones complement (not replace) existing SAR operations", type: "develop", description: "Critical framing — this proposal must not be perceived as threatening existing SAR organisations or staff. LandSAR and NZ Police must see this as additive, not competitive.", questions: ["At what stage of a SAR mission would drones typically be deployed?", "How do drone operators coordinate with ground team leaders and helicopter crews during a mission?", "What decisions remain exclusively with human SAR coordinators?"] },
+      { text: "Diagram: drone integration into SAR workflow", type: "develop", description: "A visual representation of how a drone-assisted SAR mission unfolds from activation to resolution. Likely the most referenced element in any presentation — clarity is paramount.", questions: ["What are the key sequential stages of a drone-assisted SAR mission from initial call to stand-down?", "Who is responsible at each stage — NZ Police, LandSAR, drone operator?", "What triggers the transition from drone search to ground team deployment or helicopter extraction?"] }
+    ]
+  },
+  {
+    id: 4, title: "Technical Validation", icon: "🔬",
+    desc: "Evidence that the technology works under real SAR conditions. Scrutiny from technical reviewers will be high.",
+    items: [
+      { text: "Drone hardware specifications (range, payload, weather tolerance)", type: "research", description: "The technical specification of the proposed drone platform. Funders and technical reviewers will want to see a real, capable system — not a vague 'drone concept'.", questions: ["What drone platform or type is being proposed — is there a specific model or class in mind?", "What are the key operational parameters: range, endurance, payload capacity, max altitude?", "What wind speed, temperature, and precipitation conditions can the system reliably operate in?"] },
+      { text: "Probability of Detection (POD) modelling data", type: "research", description: "The technical backbone of the entire proposal. POD is the standard SAR performance metric — improving it is the core value proposition. Data must be sourced, modelled, or clearly drawn from comparable international systems.", questions: ["What is the baseline POD for standard ground and helicopter SAR in terrain comparable to NZ's environments?", "What POD improvement does drone-assisted SAR achieve based on modelling, simulation, or international field data?", "What methodology was used to calculate or estimate the POD improvement figure?"] },
+      { text: "Simulated deployment scenarios and outcomes", type: "develop", description: "Structured simulation of real SAR scenarios demonstrating system performance — used to validate the concept where live field data is limited. Scenarios must reflect genuine NZ SAR conditions.", questions: ["What specific SAR scenarios have been or will be simulated (e.g. lost tramper, alpine fall, night search)?", "What assumptions underpin each scenario — terrain type, weather, subject condition, search area size?", "What were or are the expected outcomes in terms of detection time, area covered, and POD improvement?"] },
+      { text: "Field test results (if available)", type: "research", description: "Real-world test data is the gold standard for credibility. Even a small-scale field test dramatically strengthens the proposal. If none exist yet, present a clear field test plan.", questions: ["Have any field tests, exercises, or drone SAR demonstrations been conducted in NZ or comparable environments?", "If yes, what were the key findings, metrics, and lessons learned?", "If no field tests exist yet, what is the plan and timeline for conducting them?"] },
+      { text: "Performance in alpine / high-wind environments", type: "research", description: "Specific validation of system performance in NZ's most challenging SAR environments — Southern Alps, Fiordland, Queenstown basin. NZ-specific or comparable alpine performance data is required.", questions: ["What wind speed limits apply to the proposed drone platform in operational conditions?", "How does performance change in cold temperatures and precipitation?", "Are there documented results from comparable alpine environments where similar systems have been tested?"] },
+      { text: "Comparison of drone detection vs ground team detection rates", type: "research", description: "A direct, quantified comparison establishing the detection efficiency advantage of drones over traditional ground search — the clearest and most persuasive quantitative argument in the proposal.", questions: ["What area can a drone cover per hour vs a standard ground search team in open alpine terrain and dense bush?", "What is the relative detection rate across different terrain types?", "How does drone detection performance change at night, in rain, or in reduced visibility?"] }
+    ]
+  },
+  {
+    id: 5, title: "International Precedents", icon: "🌏",
+    desc: "Governments fund things that have worked elsewhere. This section removes perceived risk.",
+    items: [
+      { text: "Australian drone SAR deployments and outcomes", type: "research", description: "Australia is the closest comparable context — shared terrain types, common law jurisdiction, similar rescue culture. Australian precedents carry particular weight with NZ decision-makers.", questions: ["What documented Australian drone SAR programs or significant deployments are you aware of?", "What outcomes — lives saved, detection time reduced, cost saved — have been documented?", "What regulatory framework governs drone SAR in Australia vs NZ's CAA Part 102 pathway?"] },
+      { text: "European alpine drone SAR programs (Switzerland, Austria)", type: "research", description: "The Swiss and Austrian Alps represent the global benchmark for drone-assisted mountain rescue — terrain directly comparable to NZ. Programs from these countries carry strong academic and operational credibility.", questions: ["What specific programs or organisations are operating drone SAR in Switzerland and Austria?", "What performance metrics — detection rates, response times, POD improvements — have been published?", "What can NZ specifically learn from their implementation model, funding approach, or regulatory pathway?"] },
+      { text: "UK Coast Guard / RNLI drone integration", type: "research", description: "Maritime and coastal SAR drone integration in the UK provides one of the best-documented, government-supported precedents for institutional adoption.", questions: ["How have UK Coast Guard and RNLI integrated drones into their SAR operations?", "What regulatory pathway did UK maritime SAR operators follow to gain approval?", "What outcomes have been formally documented?"] },
+      { text: "Quantified outcomes: lives saved, time reduced, cost saved", type: "research", description: "Aggregated headline statistics from international drone SAR programs — distilled into the three or four most powerful numbers that will be repeated in every stakeholder conversation.", questions: ["What are the strongest, most credible quantified outcomes from international drone SAR programs?", "What is the documented average reduction in time-to-detection where drones have been deployed?", "What cost savings relative to helicopter-only operations have been formally documented and published?"] },
+      { text: "Lessons learned from international programs", type: "research", description: "Honest analysis of what has worked and what has failed internationally — demonstrates that the NZ proposal is informed, realistic, and not repeating known mistakes.", questions: ["What are the most common implementation challenges in international drone SAR programs?", "What specific mistakes have other programs made that NZ's proposal can explicitly address?", "What success factors appear consistently across the most effective international programs?"] }
+    ]
+  },
+  {
+    id: 6, title: "Regulatory Pathway", icon: "📜",
+    desc: "A credible route through NZ's regulatory framework. Funders will not back an uncertain regulatory path.",
+    items: [
+      { text: "Current CAA Part 101 rules applicable to SAR drones", type: "research", description: "The baseline regulatory framework for drone operations in NZ — the starting point for all compliance planning. Decision-makers need to understand what is already permitted before they can appreciate what Part 102 adds.", questions: ["What specific Part 101 rules apply to SAR drone operations (BVLOS, altitude, weight class)?", "What are the key limitations of Part 101 that would prevent full SAR deployment under that framework alone?", "What preliminary SAR operations could proceed under Part 101 while Part 102 is being pursued?"] },
+      { text: "Part 102 certification requirements and process", type: "research", description: "The advanced certification pathway required for complex drone operations in NZ — the regulatory target for a national SAR program. Must be described accurately; errors here undermine credibility immediately.", questions: ["What are the core technical and operational requirements for obtaining CAA Part 102 certification?", "How long does the Part 102 certification process typically take from application to approval?", "Which organisations currently hold Part 102 certification in NZ relevant to SAR or emergency operations?"] },
+      { text: "Timeline and milestones for regulatory approval", type: "develop", description: "A realistic, phased timeline from current regulatory status to full operational certification. Funders want to know implementation is planned and achievable — not that the team will 'figure it out later'.", questions: ["What is the realistic timeline from proposal approval to achieving full Part 102 operational certification?", "What are the key regulatory milestones and decision points along the pathway?", "What early-stage SAR operations can commence under Part 101 while full certification is being pursued?"] },
+      { text: "Airspace conflict mitigation strategy", type: "develop", description: "A clear plan for managing drone operations safely alongside helicopters, fixed-wing aircraft, and other SAR assets in shared airspace — scrutinised by the CAA and NZ Police.", questions: ["How will drone operations be deconflicted with helicopter SAR missions in the same search area?", "What communication protocols will drone operators use with ATC and other aircraft during SAR operations?", "What are the defined separation procedures if a drone and helicopter are simultaneously operating in proximity?"] },
+      { text: "Failure scenario risk mitigation (drone loss, signal failure)", type: "develop", description: "Documented procedures for managing drone failures during active SAR operations — essential for regulatory approval and stakeholder confidence. Drone failures must not create new hazards.", questions: ["What happens operationally if a drone loses signal or experiences mechanical failure mid-mission?", "How does a drone system failure affect the broader SAR operation?", "What redundancy systems (return-to-home, backup comms, geofencing) are built into the proposed platform?"] },
+      { text: "Ethical considerations (privacy, liability)", type: "develop", description: "A structured analysis of the ethical dimensions of drone SAR — around surveillance, data collection, and liability. NZ's Privacy Act and public sensitivity make this a necessary section.", questions: ["What image and video data is collected by SAR drones and how will it be stored, accessed, and deleted?", "What are the privacy implications of deploying aerial surveillance in recreational and residential areas during SAR?", "Who bears legal liability if a drone failure directly contributes to a negative SAR outcome?"] }
+    ]
+  },
+  {
+    id: 7, title: "Economic Case", icon: "💰",
+    desc: "The financial justification for public investment. Every figure must be sourced and defensible.",
+    items: [
+      { text: "Average cost per helicopter SAR mission in NZ", type: "research", description: "The baseline cost figure against which drone deployment will be compared. Must be sourced from official NZ Police, NZSAR, or government budget data — not industry estimates. This anchors the entire economic argument.", questions: ["What is the per-hour operational cost of SAR helicopter missions in NZ (crew, fuel, maintenance, amortisation)?", "What is the average mission duration, giving a total average cost per deployment?", "Are there significant regional cost variations — e.g. between Queenstown, Wellington, and the West Coast?"] },
+      { text: "Estimated cost per drone SAR deployment", type: "research", description: "The fully-loaded cost of deploying a drone SAR unit — hardware amortisation, operator costs, maintenance, compliance, and overhead. Must be realistic and comprehensive; underestimating creates credibility problems.", questions: ["What is the estimated capital cost of a complete SAR drone unit (platform, sensors, ground station, spares)?", "What are the per-mission variable operating costs (operator time, battery/fuel, consumables, maintenance)?", "What is the expected operational lifespan before major overhaul or replacement?"] },
+      { text: "Cost-benefit analysis model", type: "develop", description: "A structured financial model comparing drone deployment against helicopter deployment across a realistic distribution of SAR scenario types and frequencies. One of the most scrutinised sections of any government proposal.", questions: ["How many SAR missions per year in NZ would realistically be candidates for drone deployment?", "What proportion of helicopter deployment time could realistically be reduced through drone integration?", "What is the total projected annual cost saving if drones are integrated at the proposed scale?"] },
+      { text: "ROI projections for government investment", type: "develop", description: "A forward-looking model showing when government investment breaks even and what the long-term return looks like — in financial and human terms. Must account for non-financial value too.", questions: ["What is the total investment required for the proposed national drone SAR program over three to five years?", "Over what timeframe does the investment pay back through operational cost savings?", "How do you account for and communicate non-financial returns such as lives saved and faster rescues?"] },
+      { text: "Scalability cost model (per region rollout)", type: "develop", description: "A cost model showing how the program scales from pilot to national coverage — demonstrating planning maturity and giving funders confidence that expansion is affordable and structured.", questions: ["How many NZ regions would be covered in a full national rollout and in what sequence?", "What is the incremental cost of adding each new region?", "Are there meaningful economies of scale in procurement, training, or maintenance at scale?"] },
+      { text: "Long-term maintenance and operational cost estimates", type: "research", description: "Multi-year cost projections for sustaining the program — hardware refresh cycles, training, regulatory compliance, and staffing. Funders need to understand ongoing commitment, not just startup costs.", questions: ["What are the projected annual maintenance and operational costs for a regional drone SAR fleet?", "What is the hardware refresh cycle — how often does equipment need to be replaced or upgraded?", "What staffing model is required to sustain ongoing operations?"] }
+    ]
+  },
+  {
+    id: 8, title: "Stakeholder Alignment", icon: "🤝",
+    desc: "Governments rarely fund proposals that surprise the agencies who'd implement them. Demonstrate engagement.",
+    items: [
+      { text: "LandSAR organisational structure and decision-makers", type: "research", description: "Understanding who leads LandSAR NZ, how decisions are made, and who the key influencers are for technology adoption. A proposal demonstrating deep knowledge of the organisation is treated as significantly more credible.", questions: ["Who are the key decision-makers and senior leaders within LandSAR NZ at a national level?", "How is LandSAR structured — national vs. regional, volunteer vs. paid, and how are technology decisions made?", "What is LandSAR's current awareness of or position on drone-assisted SAR operations?"] },
+      { text: "NZ Police SAR unit — key contacts and operational priorities", type: "research", description: "NZ Police coordinate all national SAR operations. Understanding their structure, current priorities, and decision-making process for adopting new technology is essential.", questions: ["Which NZ Police unit or command has primary responsibility for SAR coordination?", "Who are the key operational contacts within NZ Police relevant to SAR technology and capability development?", "What are NZ Police's current stated priorities for SAR — speed, cost, coverage, technology?"] },
+      { text: "CAA engagement / pre-consultation notes", type: "research", description: "Early, documented engagement with the Civil Aviation Authority signals regulatory seriousness. Even a preliminary conversation can be cited as evidence of proactive compliance planning.", questions: ["Has there been any formal or informal engagement with the CAA regarding drone SAR operations?", "What was the CAA's initial response, feedback, or guidance?", "Who at the CAA is the appropriate contact for SAR-related Part 102 certification discussions?"] },
+      { text: "Consultation strategy for gaining stakeholder buy-in", type: "develop", description: "A structured approach to engaging SAR organisations, NZ Police, regulators, and government — ensuring the proposal has broad support before it reaches Parliament.", questions: ["What is the preferred sequence of stakeholder engagement — who needs to be consulted first and why?", "What are the key objections each major stakeholder group (LandSAR, NZ Police, CAA, Treasury) is likely to raise?", "What does a successful outcome look like from each stakeholder's perspective?"] },
+      { text: "Letters of support or expressions of interest (if obtainable)", type: "develop", description: "Formal or informal written support from SAR organisations, regional councils, or industry bodies dramatically increases proposal credibility. Even a cautiously worded expression of interest is valuable.", questions: ["Which organisations or individuals would be most willing to provide a letter of support or expression of interest?", "What would each organisation need to see or be assured of before endorsing the proposal?", "Who is the right person to approach within each organisation?"] }
+    ]
+  },
+  {
+    id: 9, title: "Risk Register", icon: "🛡️",
+    desc: "A formal risk analysis is non-negotiable for public funding. Senior reviewers look for this immediately.",
+    items: [
+      { text: "Operational risks (weather, terrain, collision)", type: "develop", description: "Risks arising during actual SAR missions — the front-line threats to safe and effective drone deployment. These are the risks most concerning to SAR coordinators and NZ Police, and they must be addressed head-on.", questions: ["What are the top three to five operational risks during a drone SAR deployment in NZ conditions?", "What is the likelihood and potential impact of each risk?", "What specific mitigation procedures address each operational risk?"] },
+      { text: "Technical risks (hardware failure, signal loss)", type: "develop", description: "Risks related to the reliability of the drone platform itself — failures that could compromise a mission or create new hazards. Technical reviewers will probe these directly.", questions: ["What are the most common technical failure modes for the proposed drone platform?", "What redundancy and failsafe systems exist (return-to-home, backup comms, geofencing, parachute recovery)?", "How are technical failures communicated to the SAR mission coordinator and what is the response protocol?"] },
+      { text: "Regulatory risks (certification delays)", type: "develop", description: "Risks that the regulatory pathway takes longer than planned, delaying deployment and eroding stakeholder confidence. Realistic acknowledgement — with mitigation — is stronger than pretending this risk doesn't exist.", questions: ["What are the most likely causes of regulatory delays in the Part 101 to Part 102 pathway?", "What specific steps can be taken to accelerate or de-risk the certification process?", "What contingency SAR operations can deliver value if full Part 102 certification is delayed?"] },
+      { text: "Reputational risks (failed deployment, public perception)", type: "develop", description: "Risks to the program's credibility and political support if a high-profile failure occurs — particularly given media sensitivity around SAR incidents.", questions: ["What would a high-profile drone SAR failure look like — and what is the realistic likelihood?", "What communication and media protocols would govern public response to a drone failure during a SAR operation?", "How is the program staged to limit reputational exposure during the early pilot phase?"] },
+      { text: "Risk likelihood vs impact matrix", type: "develop", description: "A visual risk matrix plotting each identified risk by likelihood and potential impact — the standard government risk assessment format.", questions: ["For each major identified risk, what is your assessment of likelihood: low, medium, or high?", "For each risk, what is the impact severity if it occurs: low, medium, high, or critical?", "How does the overall risk profile change as the program matures from pilot to national rollout?"] },
+      { text: "Mitigation strategy for each risk", type: "develop", description: "Specific, actionable mitigation plans for each identified risk — not just acknowledgement. This demonstrates operational maturity and is the element most likely to satisfy a Treasury or senior policy reviewer.", questions: ["What is the primary mitigation strategy for each high-priority risk?", "Who is responsible for implementing and monitoring each mitigation measure?", "What triggers a formal risk review during program implementation?"] }
+    ]
+  },
+  {
+    id: 10, title: "Implementation Roadmap", icon: "🗺️",
+    desc: "A credible phased deployment plan. Funders want to know you have a real plan, not just a concept.",
+    items: [
+      { text: "Phase 1: Pilot program design and location selection", type: "develop", description: "The initial deployment phase — scoped, controlled, designed to generate real operational data. Pilot design is scrutinised heavily because it reveals whether the team understands real-world constraints.", questions: ["What location is proposed for the pilot and why — what makes it operationally ideal and politically feasible?", "What specific SAR scenarios will the pilot be designed to test?", "What are the pre-defined success criteria that must be met for the pilot to proceed to Phase 2?"] },
+      { text: "Phase 2: Integration with LandSAR / NZ Police workflows", type: "develop", description: "The operationalisation phase — embedding drone SAR into the standard operating procedures of existing SAR agencies. Often the hardest phase to execute.", questions: ["What specific changes to LandSAR and NZ Police standard operating procedures are required for drone integration?", "How will drone operators be embedded into the existing SAR command and coordination structure?", "What training and familiarisation program is required for existing SAR personnel?"] },
+      { text: "Phase 3: National rollout criteria and timeline", type: "develop", description: "The conditions that must be met before expanding from pilot to national program — ensuring structured, evidence-based scaling rather than premature expansion.", questions: ["What specific metrics must the pilot program achieve to justify and trigger national rollout?", "What is the proposed timeline and sequence for national expansion across NZ regions?", "How will rollout be prioritised — by SAR incident frequency, geographic risk, or other criteria?"] },
+      { text: "Roles and responsibilities during deployment", type: "develop", description: "A clear RACI framework for drone SAR operations — eliminating ambiguity about command, control, and accountability during live missions where decisions matter.", questions: ["Who has operational command of the drone SAR element during a live mission?", "How do drone operators interact with ground team leaders and helicopter crews?", "Who has the authority to stand down drone operations during a mission?"] },
+      { text: "Training requirements for SAR personnel", type: "develop", description: "The training program required to bring SAR coordinators, NZ Police, and drone operators to operational readiness — covering drone-specific competencies and integration with existing SAR procedures.", questions: ["What specific training and certification is required for drone operators in a SAR context?", "What training is required for LandSAR volunteers and NZ Police to integrate with drone SAR teams?", "What is the estimated training duration and cost per person?"] },
+      { text: "Deployment protocol: when and how drones are activated", type: "develop", description: "The trigger conditions and standard operating procedure for activating drone SAR — ensuring drones are deployed at the optimal moment in every operation.", questions: ["What specific conditions trigger drone SAR deployment (elapsed time, terrain type, weather window, subject vulnerability)?", "Who makes the activation decision?", "What is the step-by-step deployment procedure from activation decision to drone airborne?"] }
+    ]
+  },
+  {
+    id: 11, title: "Governance & Accountability", icon: "🏛️",
+    desc: "How public money will be managed and overseen. No governance framework, no funding.",
+    items: [
+      { text: "Proposed governance structure and oversight body", type: "develop", description: "The institutional structure overseeing the program — defining who is responsible, who has authority, and how decisions are made. Funders need a credible governance model before committing public funds.", questions: ["What body or entity is proposed to govern the national drone SAR program — new entity, existing agency, or inter-agency board?", "Which organisations (NZ Police, LandSAR, CAA, MCDEM) should be represented in governance?", "How will governance decisions be made — by consensus, by vote, or by a designated decision-maker?"] },
+      { text: "Funding allocation and tracking framework", type: "develop", description: "How government funding will be allocated across program elements, tracked in real time, and reported against. Standard public accountability infrastructure — its absence immediately raises red flags.", questions: ["How will the total budget be allocated across hardware, operations, training, regulatory compliance, and contingency?", "What financial reporting mechanisms will provide the government with visibility over expenditure?", "What controls exist to prevent budget overrun?"] },
+      { text: "KPIs and performance benchmarks", type: "develop", description: "The specific, measurable indicators determining whether the program is succeeding — the basis for ongoing funding decisions and public accountability.", questions: ["What are the three to five most important KPIs for the program (e.g. POD improvement, response time reduction, cost per mission)?", "What are the target values for each KPI in Year 1, Year 3, and Year 5?", "How and when will KPI performance be formally reported?"] },
+      { text: "Reporting cadence to government / Parliament", type: "develop", description: "The schedule and format for formal reporting on program performance — demonstrating transparency and giving ministers confidence they will not be surprised by program issues.", questions: ["How frequently will formal performance reports be provided — quarterly, six-monthly, annually?", "What format will reporting take — written reports, ministerial briefings, or parliamentary committee appearances?", "Who is responsible for preparing and presenting the reports?"] }
+    ]
+  },
+  {
+    id: 12, title: "Monitoring & Evaluation", icon: "📊",
+    desc: "How success is measured post-deployment — and what triggers scale-up or discontinuation.",
+    items: [
+      { text: "Evaluation framework (quantitative and qualitative)", type: "develop", description: "A structured approach assessing program performance using both hard data (response times, POD, cost) and qualitative feedback (SAR team experience, public confidence). Both dimensions are necessary.", questions: ["What quantitative metrics will form the core of the evaluation framework and why were they chosen?", "What qualitative data will be collected — from whom, how, and how often?", "Will evaluation be conducted internally, by an independent reviewer, or both?"] },
+      { text: "Data collection plan during pilot", type: "develop", description: "The specific data points to be captured during every pilot deployment — the evidence base for all scaling decisions. Must be lightweight enough not to burden SAR teams while being rigorous enough to withstand scrutiny.", questions: ["What data will be systematically recorded during every drone SAR deployment in the pilot?", "How will data be collected, stored securely, and managed in compliance with NZ privacy requirements?", "What is the data collection burden on SAR teams?"] },
+      { text: "Success thresholds for national scale-up", type: "develop", description: "Specific, pre-agreed criteria that must be met before expanding nationally — preventing premature scaling and ensuring the program only grows when evidence justifies it.", questions: ["What specific quantitative outcomes must the pilot achieve before national rollout is justified?", "What is the minimum acceptable POD improvement threshold to proceed?", "What stakeholder satisfaction threshold is required from SAR teams, NZ Police, and participating communities?"] },
+      { text: "Exit criteria / conditions for program review", type: "develop", description: "The conditions under which the program would be paused, formally reviewed, or discontinued — demonstrating responsible governance and building trust with funders.", questions: ["What specific events or performance failures would trigger a formal program review or operational pause?", "Under what circumstances would the program be recommended for discontinuation?", "How would a program wind-down be managed to protect ongoing SAR capability?"] }
+    ]
+  },
+  {
+    id: 13, title: "Political Alignment", icon: "🗳️",
+    desc: "Frame the proposal within existing government priorities. Make it easy to say yes.",
+    items: [
+      { text: "Current NZ government priorities in emergency services", type: "research", description: "Understanding the current government's stated priorities around emergency services, rural safety, and technology investment — allowing the proposal to be framed in language decision-makers are already using.", questions: ["What are the NZ government's current stated priorities for emergency services and public safety?", "Are there relevant policy documents, budget commitments, or ministerial statements that align with drone SAR?", "What political pressures — rural safety, cost of government, technology modernisation — make this proposal particularly timely?"] },
+      { text: "Relevant NZ budget allocations or SAR funding history", type: "research", description: "Historical context on how the government has funded SAR — establishing precedent for the scale of investment being requested.", questions: ["How much has the NZ government historically allocated to SAR operations annually?", "Have there been recent significant increases or decreases in SAR funding, and what drove them?", "What other emergency services technology investments have been approved in the last five years that set a useful precedent?"] },
+      { text: "Alignment with rural safety and cost efficiency agendas", type: "develop", description: "Explicit framing of the proposal within government agendas that already have political support — making the ask feel like a natural extension of existing policy.", questions: ["How does drone SAR specifically advance NZ's rural safety priorities — which communities benefit most?", "How does the cost efficiency argument align with the government's current fiscal priorities?", "Which ministers' portfolios are most naturally aligned with drone SAR?"] },
+      { text: "Key government contacts (e.g., Johnny Franklin, relevant ministers)", type: "research", description: "A map of the key political and bureaucratic decision-makers who will influence the proposal's success — essential for targeted, effective stakeholder engagement.", questions: ["Who are the key parliamentary and ministerial decision-makers for SAR and emergency services technology?", "What is Johnny Franklin's specific role, decision-making authority, and what would most resonate with him?", "Which officials at MBIE, MCDEM, or NZ Police are the key bureaucratic influencers for this proposal?"] },
+      { text: "Framing narrative for parliamentary audience", type: "develop", description: "The political narrative thread pitched specifically at parliamentary decision-makers who have competing priorities, limited technical knowledge, and will be judged on the outcomes they fund.", questions: ["What is the single core message for a parliamentary audience — in one compelling sentence?", "What emotional or values-based argument will most resonate with NZ politicians (lives saved, national capability, fiscal responsibility)?", "How do you frame this as a national strategic investment, not just a regional technology project?"] }
+    ]
+  },
+  {
+    id: 14, title: "The Ask", icon: "🎯",
+    desc: "Clear, specific, and impossible to misinterpret. Vague asks get deferred. Specific asks get decisions.",
+    items: [
+      { text: "Total funding requested (itemised)", type: "develop", description: "The most scrutinised element of any government proposal. Must be specific, justified, and credible. Rounded lump sums without breakdown signal either poor planning or an attempt to obscure costs — either way it invites rejection.", questions: ["What is the total funding amount being requested across the full program?", "How is the funding broken down across hardware, pilot operations, regulatory certification, training, personnel, and contingency?", "Over what period does the funding need to be committed — single year, multi-year, or staged releases tied to milestones?"] },
+      { text: "Proposed pilot budget breakdown", type: "develop", description: "A granular budget for the initial pilot program — demonstrating financial discipline and giving funders confidence that every dollar has been thought through and justified.", questions: ["What is the total budget for the pilot program only (separate from the national program)?", "What are the major line items in the pilot budget and their individual estimated costs?", "What assumptions underpin each major budget figure?"] },
+      { text: "Requested decision timeline", type: "develop", description: "A clear, justified request for when a funding decision is needed — creating appropriate urgency without appearing presumptuous. Most effective when tied to a real operational or regulatory window.", questions: ["By what date is a funding decision needed to maintain program momentum, and why that date specifically?", "What are the consequences if the funding decision is delayed by 3, 6, or 12 months?", "Is there a specific pilot opportunity, regulatory process, or partnership timeline that requires timely action?"] },
+      { text: "Next steps post-approval", type: "develop", description: "A clear action plan for the 30, 60, and 90 days following funding approval — signalling that the team is ready to move immediately. Decision-makers want to fund momentum, not inertia.", questions: ["What are the first three concrete actions taken within 30 days of funding approval?", "What are the defined 90-day milestones that indicate the program is on track?", "Who specifically is accountable for each immediate next step?"] }
+    ]
+  },
+  {
+    id: 15, title: "Appendices", icon: "📎",
+    desc: "Supporting evidence for technical reviewers. Thorough appendices protect every claim made in the main document.",
+    items: [
+      { text: "Full technical specifications", type: "develop", description: "Detailed technical documentation for the proposed drone platform, sensor suite, and ground systems — for technical reviewers, CAA assessors, and regulatory bodies who will scrutinise operational feasibility claims.", questions: ["What drone platform or specific models are under consideration for the SAR role?", "What are the full technical specifications — range, speed, payload, endurance, operating altitude, sensor suite?", "What software systems will manage flight operations, data processing, and mission recording?"] },
+      { text: "POD data tables and models", type: "research", description: "The raw data, modelling assumptions, and methodology underpinning all POD improvement claims — for technical reviewers who will independently assess the evidence base. Methodology must be transparent and replicable.", questions: ["What data sources — academic studies, international field data, simulation outputs — underpin the POD modelling?", "What key assumptions were made in the POD model, and how sensitive are results to changes in those assumptions?", "Has the POD methodology been peer reviewed or validated by an independent expert?"] },
+      { text: "Reference list (academic, government, industry)", type: "research", description: "A comprehensive, properly formatted bibliography of all sources — demonstrating research rigour and allowing reviewers to independently verify every major claim.", questions: ["What peer-reviewed academic studies support the technical and operational claims in the proposal?", "What NZ government reports, coroner's findings, or policy documents are referenced?", "What industry sources, vendor data, or operator case studies are cited, and how is their credibility established?"] },
+      { text: "Glossary of terms", type: "develop", description: "Clear, plain-English definitions of technical, regulatory, and operational terms — ensuring accessibility for non-technical parliamentary readers and reducing the risk of misinterpretation.", questions: ["What technical terms (POD, BVLOS, RGB, LiDAR) will be unfamiliar to a general parliamentary or policy audience?", "What NZ regulatory terms (Part 101, Part 102, NOTAM) need plain-English explanation?", "What SAR-specific terminology (LandSAR, sweep width, search segment) needs to be defined?"] },
+      { text: "Supporting case studies", type: "research", description: "Detailed narrative case studies of international or comparable drone SAR deployments — providing human, story-driven evidence to complement statistical and technical evidence in the main document.", questions: ["What are the two or three most compelling and well-documented international case studies to include?", "Are there NZ-specific incidents or comparable remote-country SAR situations that could serve as local case studies?", "What format should case studies take — narrative account, data summary, infographic, or a combination?"] }
+    ]
+  }
+];
+
+const TYPE = {
+  research: { label: "Needs Research", chip: "chip-amber" },
+  develop: { label: "Needs Development", chip: "chip-blue" }
+};
+
+const SOURCES = [
+  {
+    category: "POD & Detection Data",
+    color: "#4f46e5",
+    entries: [
+      {
+        title: "DJI/EENA/Black Channel — Drone Efficacy Study (Field Trial)",
+        url: "https://www.dji.com/lv/newsroom/news/drones-help-search-rescue-teams-find-victims-faster-new-study-shows",
+        summary: "50 controlled SAR trials in Ireland and Wales. 23/30 drone teams found victims (76.7%) vs 17/20 ground teams (85%). Drone teams were 191 seconds faster on average. Key benchmark for speed advantage over ground search.",
+        type: "Field Study",
+        year: "2018",
+        relevance: "High — most-cited controlled SAR drone trial globally"
+      },
+      {
+        title: "EENA Drone Efficacy Study Project — Full Report",
+        url: "https://eena.org/drone-efficacy-study-project/",
+        summary: "European Emergency Number Association's full documentation of the DJI drone efficacy field trial. Includes methodology, raw data, and policy recommendations for integrating drones into emergency response.",
+        type: "Field Study",
+        year: "2018",
+        relevance: "High — primary source for DJI/EENA efficacy trial"
+      },
+      {
+        title: "Assessing Drone Performance and POD for SAR in Northern Canada — ISCRAM",
+        url: "https://ojs.iscram.org/index.php/Proceedings/article/view/197",
+        summary: "Statistical analysis of drone deployability and Probability of Detection across varying weather conditions and terrain in Northern Canada. Directly comparable cold/alpine environment to NZ's SAR context.",
+        type: "Academic Paper",
+        year: "2023",
+        relevance: "High — alpine/cold environment POD data directly comparable to NZ"
+      },
+      {
+        title: "Experimental Validation of UAV Search and Detection in Real Wilderness — MDPI",
+        url: "https://www.mdpi.com/2504-446X/9/7/473",
+        summary: "Field validation of a UAV-based detection system in real wilderness environments. Reports ~80% victim identification success rate in mountainous terrain — the closest published benchmark to NZ's SAR context and consistent with Alexander's own field testing.",
+        type: "Academic Paper",
+        year: "2025",
+        relevance: "Critical — 80% POD in mountainous terrain directly supports headline stat"
+      }
+    ]
+  },
+  {
+    category: "Field Studies & Efficacy Reports",
+    color: "#0891b2",
+    entries: [
+      {
+        title: "DJI/EENA SAR Drone Study Findings — DroneLife Analysis",
+        url: "https://dronelife.com/2018/09/21/dji-eena-sar-drone-study-findings/",
+        summary: "Industry analysis of the DJI/EENA study findings with additional context on operational implications for SAR teams. Useful for non-technical framing of the data.",
+        type: "Industry Report",
+        year: "2018",
+        relevance: "Medium — accessible summary useful for non-technical sections"
+      },
+      {
+        title: "How Drones Are Revolutionising Search and Rescue — Scientific American",
+        url: "https://www.scientificamerican.com/article/how-drones-are-revolutionizing-search-and-rescue/",
+        summary: "Scientific American overview of drone SAR adoption globally. Credible mainstream source useful for establishing public and political context around drone SAR efficacy.",
+        type: "Media / Overview",
+        year: "2024",
+        relevance: "Medium — credible public-facing source for political alignment section"
+      },
+      {
+        title: "Performance and Efficiency Assessment of Drone in SAR Operations — ResearchGate",
+        url: "https://www.researchgate.net/publication/362235938_Performance_and_Efficiency_Assessment_of_Drone_in_Search_and_Rescue_Operation",
+        summary: "Peer-reviewed performance and efficiency assessment across multiple SAR deployment scenarios. Covers detection rates, area coverage per hour, and operational constraints.",
+        type: "Academic Paper",
+        year: "2022",
+        relevance: "High — multi-scenario performance data for Technical Validation section"
+      },
+      {
+        title: "Drones in Emergency Response — Multi-disciplinary Usability Tests — ScienceDirect",
+        url: "https://www.sciencedirect.com/science/article/abs/pii/S2212420921005288",
+        summary: "Cross-border, multi-disciplinary field tests of drone use in emergency response. Covers urgent missions including SAR and emergency delivery. Supports force-multiplier framing.",
+        type: "Academic Paper",
+        year: "2021",
+        relevance: "Medium — supports micro-aid delivery and force-multiplier argument"
+      }
+    ]
+  },
+  {
+    category: "Technical & Academic Research",
+    color: "#059669",
+    entries: [
+      {
+        title: "UAVs for Search and Rescue: A Survey — MDPI Remote Sensing",
+        url: "https://www.mdpi.com/2072-4292/15/13/3266",
+        summary: "Comprehensive global survey of UAV applications in SAR. Covers detection methodologies, sensor types (RGB, thermal, LiDAR), operational frameworks, and performance benchmarks across terrain types.",
+        type: "Survey Paper",
+        year: "2023",
+        relevance: "High — broadest evidence base; supports Technical Validation and International Precedents sections"
+      },
+      {
+        title: "Unmanned Aerial Systems in SAR: Global Perspective — ScienceDirect",
+        url: "https://www.sciencedirect.com/science/article/abs/pii/S2212420925000238",
+        summary: "2025 global perspective on current challenges and future applications of UAS in SAR. Covers regulatory landscape, operational integration, and detection system performance across international programs.",
+        type: "Academic Paper",
+        year: "2025",
+        relevance: "High — most recent global overview; directly supports International Precedents and Technical Validation"
+      },
+      {
+        title: "Real-Time SAR with Drones: Deep Learning YOLO Detection — MDPI",
+        url: "https://www.mdpi.com/2504-446X/9/8/514",
+        summary: "Technical paper on real-time person detection using YOLO-based deep learning on drone platforms. Relevant to the RGB anomaly detection methodology used in Reach Before Rescue.",
+        type: "Academic Paper",
+        year: "2025",
+        relevance: "Medium — supports RGB/AI detection methodology in Technical Validation"
+      },
+      {
+        title: "Thermal Image Tracking for SAR Missions with a Drone — MDPI",
+        url: "https://www.mdpi.com/2504-446X/8/2/53",
+        summary: "Study on thermal imaging drone performance in SAR missions. Covers detection in low-light and adverse weather conditions — scenarios where RGB systems are limited and thermal provides the advantage.",
+        type: "Academic Paper",
+        year: "2024",
+        relevance: "Medium — thermal vs RGB comparison; relevant to sensor selection rationale"
+      },
+      {
+        title: "Aerial Person Detection for SAR: Survey and Benchmarks — Journal of Remote Sensing",
+        url: "https://spj.science.org/doi/10.34133/remotesensing.0474",
+        summary: "Benchmark survey of person detection algorithms for aerial SAR imagery. Covers detection accuracy, false positive rates, and performance across terrain and visibility conditions.",
+        type: "Academic Paper",
+        year: "2024",
+        relevance: "High — provides detection accuracy benchmarks for POD modelling"
+      }
+    ]
+  },
+  {
+    category: "NZ & Regional Context",
+    color: "#dc2626",
+    entries: [
+      {
+        title: "NZ Police — Search and Rescue (To be sourced)",
+        url: "",
+        summary: "Official NZ Police SAR statistics, annual incident data, and operational framework. Primary source for NZ SAR baseline data including response times, incident frequency, and helicopter deployment costs.",
+        type: "Government Source",
+        year: "TBC",
+        relevance: "Critical — required for The Problem and Economic Case sections"
+      },
+      {
+        title: "Land Search and Rescue NZ — LSAR Annual Report (To be sourced)",
+        url: "",
+        summary: "LandSAR annual reporting on SAR activations, volunteer deployments, and operational outcomes. Key source for NZ-specific SAR statistics and stakeholder alignment context.",
+        type: "Government Source",
+        year: "TBC",
+        relevance: "Critical — required for Problem Statement and Stakeholder Alignment"
+      },
+      {
+        title: "NZ CAA Part 102 Operator Certification (To be sourced)",
+        url: "",
+        summary: "CAA documentation of Part 102 certification requirements, process timeline, and existing certified operators. Foundation of the Regulatory Pathway section.",
+        type: "Regulatory Document",
+        year: "TBC",
+        relevance: "Critical — required for Regulatory Pathway section"
+      }
+    ]
+  }
+];
+
+function App() {
+  const load = (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+  const [page, setPage] = useState("tracker");
+  const [filter, setFilter] = useState("all");
+  const [expanded, setExpanded] = useState(() => load("rbr_expanded", SECTIONS.map(s => s.id)));
+  const [checked, setChecked] = useState(() => load("rbr_checked", {}));
+  const [answers, setAnswers] = useState(() => load("rbr_answers", {}));
+  const [active, setActive] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  const persistChecked = (val) => { setChecked(val); save("rbr_checked", val); };
+  const persistAnswers = (val) => { setAnswers(val); save("rbr_answers", val); };
+  const persistExpanded = (val) => { setExpanded(val); save("rbr_expanded", val); };
+
+  const allItems = SECTIONS.flatMap(s => s.items.map(i => ({ ...i, sid: s.id })));
+  const total = allItems.length;
+  const done = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((done / total) * 100);
+  const researchTotal = allItems.filter(i => i.type === "research").length;
+  const developTotal = allItems.filter(i => i.type === "develop").length;
+  const researchDone = allItems.filter(i => i.type === "research" && checked[i.sid + "__" + i.text]).length;
+  const developDone = allItems.filter(i => i.type === "develop" && checked[i.sid + "__" + i.text]).length;
+
+  const key = (sid, text) => sid + "__" + text;
+  const akey = (sid, text, qi) => sid + "__" + text + "__q" + qi;
+  const getAns = (sid, text, qi) => answers[akey(sid, text, qi)] || "";
+  const setAns = (sid, text, qi, val) => { const next = { ...answers, [akey(sid, text, qi)]: val }; persistAnswers(next); };
+
+  const toggleSec = id => persistExpanded(expanded.includes(id) ? expanded.filter(x => x !== id) : [...expanded, id]);
+
+  const openPanel = (section, item) => { setActive({ section, item }); setCopied(false); };
+  const closePanel = () => setActive(null);
+
+  const copyForClaude = () => {
+    const { section, item } = active;
+    const lines = [
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "REACH BEFORE RESCUE — ITEM WORKFLOW",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "",
+      "Section: " + section.title,
+      "Item: " + item.text,
+      "",
+      "WHAT THIS NEEDS TO COVER:",
+      item.description,
+      "",
+      "MY ANSWERS:",
+      ...item.questions.flatMap((q, i) => ["", "Q" + (i+1) + ": " + q, "A: " + (getAns(section.id, item.text, i) || "(not yet answered)")]),
+      "",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      'Using the context above, please write a comprehensive, government-grade "' + item.text + '" for the Reach Before Rescue drone-assisted SAR proposal targeting NZ Parliament. Make it credible, specific, and persuasive.'
+    ];
+    navigator.clipboard.writeText(lines.join("\n")).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    }).catch(() => {
+      const ta = document.createElement("textarea");
+      ta.value = lines.join("\n");
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    });
+  };
+
+  const filteredSections = SECTIONS.map(s => ({
+    ...s,
+    items: s.items.filter(item => {
+      if (filter === "completed") return checked[key(s.id, item.text)];
+      if (filter === "all") return true;
+      return item.type === filter;
+    })
+  })).filter(s => s.items.length > 0);
+
+  return (
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", marginRight: active ? "420px" : 0, transition: "margin-right 0.25s" }}>
+        {/* HEADER */}
+        <div style={{ background: "#111827", color: "white", padding: "20px 24px" }}>
+          <div style={{ maxWidth: 740, margin: "0 auto" }}>
+            <div style={{ fontSize: 11, letterSpacing: 2, color: "#9ca3af", textTransform: "uppercase", marginBottom: 4 }}>Liger Impact Project · NZ Government Proposal</div>
+            <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: -0.5 }}>Reach Before Rescue</h1>
+            <p style={{ color: "#9ca3af", fontSize: 13, marginTop: 2 }}>Drone-Assisted SAR · Proposal Development Tracker</p>
+            <div style={{ marginTop: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#9ca3af", marginBottom: 4 }}>
+                <span>{done} of {total} items completed</span>
+                <span style={{ color: "white", fontWeight: 700 }}>{pct}%</span>
+              </div>
+              <div className="progress-bar"><div className="progress-fill" style={{ width: pct + "%" }} /></div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+              <div className="stat-box"><div className="stat-num">{SECTIONS.length}</div><div className="stat-label">Sections</div></div>
+              <div className="stat-box" style={{ background: "rgba(217,119,6,0.15)" }}><div className="stat-num" style={{ color: "#fcd34d" }}>{researchDone}/{researchTotal}</div><div className="stat-label" style={{ color: "#f59e0b" }}>Research</div></div>
+              <div className="stat-box" style={{ background: "rgba(59,130,246,0.15)" }}><div className="stat-num" style={{ color: "#93c5fd" }}>{developDone}/{developTotal}</div><div className="stat-label" style={{ color: "#60a5fa" }}>Develop</div></div>
+              <div className="stat-box" style={{ background: "rgba(34,197,94,0.15)" }}><div className="stat-num" style={{ color: "#86efac" }}>{done}/{total}</div><div className="stat-label" style={{ color: "#4ade80" }}>Complete</div></div>
+            </div>
+            <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
+              {[["tracker","📋 Tracker"],["sources","📚 Sources"]].map(([p, label]) => (
+                <button key={p} onClick={() => { setPage(p); setActive(null); }}
+                  style={{ padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all 0.15s", background: page === p ? "white" : "transparent", color: page === p ? "#111827" : "rgba(255,255,255,0.6)", borderColor: page === p ? "white" : "rgba(255,255,255,0.2)" }}>
+                  {label}
+                </button>
+              ))}
+              {page === "sources" && (
+                <span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
+                  {SOURCES.reduce((a, c) => a + c.entries.length, 0)} sources across {SOURCES.length} categories
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* SOURCES PAGE */}
+        {page === "sources" && (
+          <div style={{ maxWidth: 740, margin: "0 auto", padding: "24px 20px 60px" }}>
+            <div style={{ marginBottom: 20 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>Evidence & Sources</h2>
+              <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4 }}>All research sources for the Reach Before Rescue proposal. Claude adds to this automatically as research is conducted.</p>
+            </div>
+            {SOURCES.map((cat, ci) => (
+              <div key={ci} style={{ marginBottom: 28 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <div style={{ width: 10, height: 10, borderRadius: 2, background: cat.color, flexShrink: 0 }} />
+                  <h3 style={{ fontSize: 13, fontWeight: 800, color: "#111827", textTransform: "uppercase", letterSpacing: 0.5 }}>{cat.category}</h3>
+                  <div style={{ flex: 1, height: 1, background: "#e5e7eb" }} />
+                  <span style={{ fontSize: 11, color: "#9ca3af" }}>{cat.entries.length} source{cat.entries.length !== 1 ? "s" : ""}</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {cat.entries.map((src, si) => (
+                    <div key={si} style={{ background: "white", border: "1px solid #e5e7eb", borderRadius: 10, padding: "14px 16px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", borderLeft: `3px solid ${cat.color}` }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 6 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          {src.url ? (
+                            <a href={src.url} target="_blank" rel="noopener noreferrer"
+                              style={{ fontSize: 14, fontWeight: 700, color: "#1d4ed8", textDecoration: "none", lineHeight: 1.4, display: "block" }}
+                              onMouseOver={e => e.target.style.textDecoration = "underline"}
+                              onMouseOut={e => e.target.style.textDecoration = "none"}>
+                              {src.title}
+                            </a>
+                          ) : (
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#6b7280", lineHeight: 1.4, display: "block" }}>{src.title}</span>
+                          )}
+                        </div>
+                        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                          <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, background: "#f3f4f6", color: "#374151", fontWeight: 600, border: "1px solid #e5e7eb" }}>{src.type}</span>
+                          <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 999, background: src.year === "TBC" ? "#fff7ed" : "#f0fdf4", color: src.year === "TBC" ? "#c2410c" : "#166534", fontWeight: 600, border: `1px solid ${src.year === "TBC" ? "#fed7aa" : "#bbf7d0"}` }}>{src.year}</span>
+                        </div>
+                      </div>
+                      <p style={{ fontSize: 12, color: "#4b5563", lineHeight: 1.6, marginBottom: 8 }}>{src.summary}</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 10, color: "#9ca3af", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>Relevance:</span>
+                        <span style={{ fontSize: 11, color: src.relevance.startsWith("Critical") ? "#dc2626" : src.relevance.startsWith("High") ? "#16a34a" : "#d97706", fontWeight: 600 }}>{src.relevance}</span>
+                      </div>
+                      {!src.url && (
+                        <div style={{ marginTop: 8, padding: "6px 10px", background: "#fff7ed", borderRadius: 6, fontSize: 11, color: "#c2410c", fontWeight: 600 }}>
+                          ⚠ URL not yet sourced — needs research
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 16 }}>
+              Reach Before Rescue · Sources Library · Updated as research is conducted
+            </div>
+          </div>
+        )}
+
+        {/* FILTER BAR */}
+        {page === "tracker" && <div className="filter-bar" style={{display: page === "tracker" ? "" : "none"}}>
+          <div style={{ maxWidth: 740, width: "100%", margin: "0 auto", display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }} className="filter-inner">
+            {[["all","All items"],["research","🔍 Research"],["develop","✏️ Develop"],["completed","✅ Done"]].map(([k, label]) => (
+              <button key={k} className="btn-sm" onClick={() => setFilter(k)}
+                style={{ background: filter === k ? "#111827" : "white", color: filter === k ? "white" : "#374151", borderColor: filter === k ? "#111827" : "#d1d5db" }}>
+                {label}
+              </button>
+            ))}
+            <div style={{ marginLeft: "auto", display: "flex", gap: 12 }}>
+              <button onClick={() => persistExpanded(SECTIONS.map(s => s.id))} style={{ fontSize: 11, color: "#9ca3af", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Expand all</button>
+              <button onClick={() => persistExpanded([])} style={{ fontSize: 11, color: "#9ca3af", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Collapse all</button>
+            </div>
+          </div>
+        </div>}
+
+        {/* SECTIONS */}
+        {page === "tracker" && <div className="section-list">
+          {filteredSections.map(section => {
+            const isOpen = expanded.includes(section.id);
+            const secDone = section.items.filter(i => checked[key(section.id, i.text)]).length;
+            const allDone = secDone === section.items.length;
+            return (
+              <div key={section.id} className={`section-card${allDone ? " done" : ""}`}>
+                <button className="section-header" onClick={() => toggleSec(section.id)}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                    <span style={{ fontSize: 20, flexShrink: 0 }}>{section.icon}</span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <span style={{ fontSize: 10, color: "#9ca3af", fontFamily: "monospace" }}>§{section.id}</span>
+                        {allDone && <span style={{ fontSize: 10, color: "#16a34a", fontWeight: 700 }}>Complete ✓</span>}
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>{section.title}</div>
+                      <div style={{ fontSize: 11, color: "#6b7280", marginTop: 1 }}>{section.desc}</div>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, marginLeft: 12 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: allDone ? "#16a34a" : "#9ca3af", fontVariantNumeric: "tabular-nums" }}>{secDone}/{section.items.length}</span>
+                    <span style={{ color: "#d1d5db", fontSize: 11 }}>{isOpen ? "▲" : "▼"}</span>
+                  </div>
+                </button>
+                {isOpen && section.items.map(item => {
+                  const k = key(section.id, item.text);
+                  const isChecked = !!checked[k];
+                  const isActive = active?.item.text === item.text && active?.section.id === section.id;
+                  const hasAns = item.questions.some((_, i) => getAns(section.id, item.text, i).trim());
+                  return (
+                    <div key={k} className={`item-row${isActive ? " active" : ""}${isChecked ? " done-item" : ""}`} onClick={() => openPanel(section, item)}>
+                      <input type="checkbox" checked={isChecked}
+                        onChange={e => { e.stopPropagation(); persistChecked({ ...checked, [k]: !checked[k] }); }}
+                        onClick={e => e.stopPropagation()} />
+                      <span style={{ flex: 1, fontSize: 13, color: isChecked ? "#9ca3af" : "#1f2937", textDecoration: isChecked ? "line-through" : "none" }}>{item.text}</span>
+                      {hasAns && !isChecked && <span style={{ fontSize: 10, color: "#6366f1", fontWeight: 600 }}>In progress</span>}
+                      <span className={`chip ${TYPE[item.type].chip}`}>{TYPE[item.type].label}</span>
+                      <span style={{ color: "#d1d5db", fontSize: 12 }}>›</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+          <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 16 }}>
+            Reach Before Rescue · Liger Impact Project · NZ Government Proposal
+          </div>
+        </div>}
+      </div>
+
+      {/* WORK PANEL */}
+      {active && (
+        <div className="panel">
+          <div className="panel-header">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 10, color: "#9ca3af", marginBottom: 2 }}>§{active.section.id} · {active.section.title}</div>
+                <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.4 }}>{active.item.text}</div>
+              </div>
+              <button onClick={closePanel} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1, flexShrink: 0, marginTop: 2 }}>×</button>
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <span className={`chip ${TYPE[active.item.type].chip}`}>{TYPE[active.item.type].label}</span>
+            </div>
+          </div>
+
+          <div className="panel-body">
+            <div className="desc-box">
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>What this needs to cover</div>
+              <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6 }}>{active.item.description}</p>
+            </div>
+
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Answer these — then copy for Claude</div>
+
+            {active.item.questions.map((q, i) => (
+              <div key={i} style={{ marginBottom: 16 }}>
+                <div className="q-label">
+                  <span className="q-num">{i + 1}</span>
+                  <span>{q}</span>
+                </div>
+                <textarea className="answer" rows={3}
+                  value={getAns(active.section.id, active.item.text, i)}
+                  onChange={e => setAns(active.section.id, active.item.text, i, e.target.value)}
+                  placeholder="Type your answer here..." />
+              </div>
+            ))}
+          </div>
+
+          <div className="panel-footer">
+            <button className={`btn ${copied ? "btn-success" : "btn-primary"}`} style={{ width: "100%" }} onClick={copyForClaude}>
+              {copied ? "✓ Copied — paste it into the chat!" : "📋 Copy Q&A for Claude"}
+            </button>
+            <button className="btn btn-outline" style={{ width: "100%" }}
+              onClick={() => persistChecked({ ...checked, [key(active.section.id, active.item.text)]: !checked[key(active.section.id, active.item.text)] })}>
+              {checked[key(active.section.id, active.item.text)] ? "✓ Marked as complete" : "Mark as complete"}
+            </button>
+            <p style={{ fontSize: 11, color: "#9ca3af", textAlign: "center" }}>
+              Fill in your answers, copy, then paste into the chat for Claude to generate the content.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+</body>
+</html>
