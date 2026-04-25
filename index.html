@@ -57,6 +57,31 @@
     .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
     .sync-pill.live .sync-dot { animation: livepulse 2s ease-in-out infinite; }
     @keyframes livepulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .expert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; padding-top: 4px; }
+    .expert-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.15s; }
+    .expert-card:hover { border-color: #818cf8; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+    .status-pill-mini { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    .status-to_contact { background: #f3f4f6; color: #6b7280; }
+    .status-outreach_sent { background: #fef3c7; color: #92400e; }
+    .status-scheduled { background: #dbeafe; color: #1e40af; }
+    .status-met { background: #dcfce7; color: #166534; }
+    .status-follow_up { background: #fce7f3; color: #9f1239; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal { background: white; border-radius: 14px; width: 100%; max-width: 720px; max-height: 92vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+    .modal-head { padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: sticky; top: 0; background: white; z-index: 1; }
+    .modal-body { padding: 16px 20px; }
+    .modal-foot { padding: 12px 20px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+    .field { margin-bottom: 12px; }
+    .field-label { display: block; font-size: 10px; font-weight: 700; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input, .field-textarea, .field-select { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; color: #1f2937; outline: none; transition: border 0.15s; }
+    .field-input:focus, .field-textarea:focus, .field-select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(129,140,248,0.15); }
+    .attachment-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
+    .attachment-row a { color: #4338ca; text-decoration: none; font-weight: 600; }
+    .attachment-row a:hover { text-decoration: underline; }
+    .tpl-btn { padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid #d1d5db; background: white; color: #374151; transition: all 0.15s; }
+    .tpl-btn:hover { border-color: #4f46e5; background: #eef2ff; color: #4338ca; }
+    .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px) { .field-grid-2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -81,6 +106,27 @@ async function dbDelete(key) {
   if (error) console.error("[dbDelete]", key, error.message);
   return !error;
 }
+const STORAGE_BUCKET = "expert-files";
+async function uploadExpertFile(expertId, file) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "_");
+  const path = expertId + "/" + Date.now() + "-" + safeName;
+  const { error } = await sb.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: false });
+  if (error) { console.error("[uploadExpertFile]", error.message); return null; }
+  const { data } = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  return { path, url: data.publicUrl, name: file.name, type: file.type, size: file.size, uploadedAt: new Date().toISOString() };
+}
+async function deleteExpertFile(path) {
+  const { error } = await sb.storage.from(STORAGE_BUCKET).remove([path]);
+  if (error) console.error("[deleteExpertFile]", error.message);
+  return !error;
+}
+const EMAIL_TEMPLATES = [
+  { id: "intro", label: "Intro outreach", subject: "Reach Before Rescue — Impact Project introduction", body: function(e) { return "Kia ora " + (e.name||"") + ",\n\nMy name is Alexander — I'm a senior at Liger (Cambodia) and I'm developing an Impact Project called Reach Before Rescue, a drone-assisted SAR proposal aimed at New Zealand Parliament. The proposal builds on extensive international evidence (Switzerland, UK, Australia) and the NZSAR Fatality Study, and is designed to complement (not replace) existing helicopter and ground SAR.\n\nI'd love 30 minutes of your time to learn from your perspective at " + (e.organization||"your organisation") + ", particularly around " + (e.purpose||"your area of expertise") + ". I'm happy to share the proposal tracker (live online) ahead of any conversation.\n\nWould any time over the next two weeks suit?\n\nNga mihi,\nAlexander"; } },
+  { id: "meeting_request", label: "Meeting request", subject: "Meeting request — Reach Before Rescue", body: function(e) { return "Kia ora " + (e.name||"") + ",\n\nFollowing up on Reach Before Rescue. I'd value a 30–45 minute conversation specifically on:\n\n1) " + (e.purpose||"the area we discussed") + "\n2) Your operational view on drone-assisted SAR integration\n3) Any immediate flags or concerns I should design around\n\nI can come to you, or jump on a video call — whichever is easier.\n\nThank you,\nAlexander"; } },
+  { id: "data_request", label: "Data / docs request", subject: "Data request — Reach Before Rescue", body: function(e) { return "Kia ora " + (e.name||"") + ",\n\nFor the Reach Before Rescue proposal we are sourcing a small number of NZ-specific data points and would value " + (e.organization||"your organisation") + "'s input. Specifically:\n\n• [Data point 1]\n• [Data point 2]\n• [Data point 3]\n\nIf any of this is publicly published or you can share an internal source, that would be enormously helpful. I'm happy to credit you in the proposal acknowledgements.\n\nThank you,\nAlexander"; } },
+  { id: "followup", label: "Follow-up", subject: "Following up — Reach Before Rescue", body: function(e) { return "Kia ora " + (e.name||"") + ",\n\nJust gently following up on my earlier note about Reach Before Rescue. I appreciate you'll be busy — if you'd prefer to direct me to a colleague at " + (e.organization||"") + " or you'd like a written summary first, I'm happy with whatever works best for you.\n\nThank you,\nAlexander"; } },
+  { id: "thanks", label: "Thank you", subject: "Thank you — Reach Before Rescue", body: function(e) { return "Kia ora " + (e.name||"") + ",\n\nThank you for your time today. The conversation was valuable and I've added the key points to the proposal tracker. As discussed, my next steps are:\n\n• [Action 1]\n• [Action 2]\n\nI'll keep you posted on progress, and please let me know if anything came to mind after we spoke.\n\nNga mihi,\nAlexander"; } }
+];
 const SECTIONS = [
   {
     id: 1, title: "Executive Summary", icon: "\u{1F4CB}",
@@ -415,6 +461,11 @@ function App() {
   const [checked, setChecked] = useState({});
   const [answers, setAnswers] = useState({});
   const [userSources, setUserSources] = useState([]);
+  const [experts, setExperts] = useState([]);
+  const [editingExpert, setEditingExpert] = useState(null);
+  const [openExpert, setOpenExpert] = useState(null);
+  const [emailTemplate, setEmailTemplate] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [active, setActive] = useState(null);
   const [copied, setCopied] = useState(false);
   const [syncStatus, setSyncStatus] = useState("connecting"); // connecting | live | saving | error
@@ -461,15 +512,17 @@ function App() {
         setSyncStatus("error");
         return;
       }
-      const c = {}, a = {}, s = [];
+      const c = {}, a = {}, s = [], ex = [];
       for (const row of data || []) {
         if (row.key.startsWith("c:")) c[row.key.slice(2)] = !!row.value;
         else if (row.key.startsWith("a:")) a[row.key.slice(2)] = row.value;
         else if (row.key.startsWith("s:")) s.push({ id: row.key.slice(2), ...row.value });
+        else if (row.key.startsWith("e:")) ex.push({ id: row.key.slice(2), ...row.value });
       }
       setChecked(c);
       setAnswers(a);
       setUserSources(s);
+      setExperts(ex);
       setSyncStatus("live");
     })();
   }, []);
@@ -487,10 +540,17 @@ function App() {
           if (k.startsWith("c:")) setChecked(p => { const n = { ...p }; delete n[k.slice(2)]; return n; });
           else if (k.startsWith("a:")) setAnswers(p => { const n = { ...p }; delete n[k.slice(2)]; return n; });
           else if (k.startsWith("s:")) setUserSources(p => p.filter(x => x.id !== k.slice(2)));
+          else if (k.startsWith("e:")) setExperts(p => p.filter(x => x.id !== k.slice(2)));
         } else {
           if (k.startsWith("c:")) setChecked(p => ({ ...p, [k.slice(2)]: !!row.value }));
           else if (k.startsWith("a:")) setAnswers(p => ({ ...p, [k.slice(2)]: row.value }));
           else if (k.startsWith("s:")) setUserSources(p => {
+            const id = k.slice(2);
+            const next = p.filter(x => x.id !== id);
+            next.push({ id, ...row.value });
+            return next;
+          });
+          else if (k.startsWith("e:")) setExperts(p => {
             const id = k.slice(2);
             const next = p.filter(x => x.id !== id);
             next.push({ id, ...row.value });
@@ -525,6 +585,20 @@ function App() {
     const next = !checked[sub];
     setChecked(prev => ({ ...prev, [sub]: next }));
     immediateWrite("c:" + sub, next, !next);
+  };
+  const saveExpert = async (expert) => {
+    const id = expert.id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+    const updated = { ...expert, id, updatedAt: new Date().toISOString() };
+    setExperts(prev => {
+      const others = prev.filter(x => x.id !== id);
+      return [...others, updated];
+    });
+    immediateWrite("e:" + id, updated, false);
+    return updated;
+  };
+  const deleteExpertById = async (id) => {
+    setExperts(prev => prev.filter(x => x.id !== id));
+    immediateWrite("e:" + id, null, true);
   };
   const toggleSec = id => setExpanded(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const openPanel = (section, item) => { setActive({ section, item }); setCopied(false); };
@@ -604,7 +678,7 @@ function App() {
               <div className="stat-box" style={{ background: "rgba(34,197,94,0.15)" }}><div className="stat-num" style={{ color: "#86efac" }}>{done}/{total}</div><div className="stat-label" style={{ color: "#4ade80" }}>Complete</div></div>
             </div>
             <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
-              {[["tracker","\u{1F4CB} Tracker"],["sources","\u{1F4DA} Sources"]].map(([p, label]) => (
+              {[["tracker","\u{1F4CB} Tracker"],["sources","\u{1F4DA} Sources"],["experts","\u{1F465} Experts"]].map(([p, label]) => (
                 <button key={p} onClick={() => { setPage(p); setActive(null); }}
                   style={{ padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all 0.15s", background: page === p ? "white" : "transparent", color: page === p ? "#111827" : "rgba(255,255,255,0.6)", borderColor: page === p ? "white" : "rgba(255,255,255,0.2)" }}>
                   {label}
@@ -613,6 +687,11 @@ function App() {
               {page === "sources" && (
                 <span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
                   {SOURCES.reduce((a, c) => a + c.entries.length, 0) + userSources.length} sources across {SOURCES.length + (userSources.length > 0 ? 1 : 0)} categories
+                </span>
+              )}
+              {page === "experts" && (
+                <span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
+                  {experts.length} expert{experts.length !== 1 ? "s" : ""} · {experts.filter(e => e.status === "met").length} met · {experts.filter(e => e.status === "to_contact").length} to contact
                 </span>
               )}
             </div>
@@ -672,6 +751,48 @@ function App() {
             <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 16 }}>
               Reach Before Rescue · Sources Library · Updated as research is conducted
             </div>
+          </div>
+        )}
+        {/* EXPERTS PAGE */}
+        {page === "experts" && (
+          <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 20px 60px" }}>
+            <div style={{ marginBottom: 18, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+              <div>
+                <h2 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>Experts & Interviews</h2>
+                <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, maxWidth: 640 }}>Stakeholder map for the proposal. Add experts you need to interview, draft outreach emails, drop meeting notes and audio. All entries sync live across collaborators.</p>
+              </div>
+              <button className="btn btn-primary" onClick={() => setEditingExpert({ name: "", role: "", organization: "", description: "", purpose: "", email: "", phone: "", meetingLink: "", status: "to_contact", meetingDate: "", notes: "", attachments: [] })}>+ Add expert</button>
+            </div>
+            {experts.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "60px 20px", background: "white", border: "1px dashed #e5e7eb", borderRadius: 14, color: "#6b7280" }}>
+                <div style={{ fontSize: 30, marginBottom: 8 }}>👥</div>
+                <p style={{ fontSize: 14, fontWeight: 600 }}>No experts added yet</p>
+                <p style={{ fontSize: 12, marginTop: 6 }}>Click “+ Add expert” to get started.</p>
+              </div>
+            ) : (
+              <div className="expert-grid">
+                {[...experts].sort((a,b) => (a.name||"").localeCompare(b.name||"")).map(exp => (
+                  <div key={exp.id} className="expert-card" onClick={() => setOpenExpert(exp)}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+                      <div style={{ minWidth: 0 }}>
+                        <div className="expert-name">{exp.name || "(unnamed)"}</div>
+                        <div className="expert-role">{exp.role}</div>
+                        <div className="expert-org">{exp.organization}</div>
+                      </div>
+                      <span className={"status-pill-mini status-" + (exp.status||"to_contact")}>{(exp.status||"to_contact").replace(/_/g, " ")}</span>
+                    </div>
+                    {exp.description && <p style={{ fontSize: 12, color: "#4b5563", lineHeight: 1.5, marginTop: 4, marginBottom: 6 }}>{exp.description.slice(0, 140)}{exp.description.length > 140 ? "…" : ""}</p>}
+                    <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", fontSize: 11, color: "#6b7280" }}>
+                      {exp.email && <span>✉️</span>}
+                      {exp.meetingLink && <span>🔗</span>}
+                      {exp.attachments && exp.attachments.length > 0 && <span>📎 {exp.attachments.length}</span>}
+                      {exp.notes && <span>📝</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 24 }}>Reach Before Rescue · Experts · Live shared workspace</div>
           </div>
         )}
         {/* FILTER BAR */}
@@ -740,6 +861,135 @@ function App() {
         </div>}
       </div>
       {/* WORK PANEL */}
+      {openExpert && !editingExpert && (
+        <div className="modal-backdrop" onClick={() => setOpenExpert(null)}>
+          <div className="modal" onClick={ev => ev.stopPropagation()}>
+            <div className="modal-head">
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>{openExpert.name}</h3>
+                  <span className={"status-pill-mini status-" + (openExpert.status||"to_contact")}>{(openExpert.status||"to_contact").replace(/_/g, " ")}</span>
+                </div>
+                <div style={{ fontSize: 12, color: "#4b5563", marginTop: 2 }}>{openExpert.role}{openExpert.organization && (" · " + openExpert.organization)}</div>
+              </div>
+              <button onClick={() => setOpenExpert(null)} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1, flexShrink: 0 }}>×</button>
+            </div>
+            <div className="modal-body">
+              {openExpert.description && (
+                <div className="field">
+                  <span className="field-label">Description</span>
+                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6 }}>{openExpert.description}</p>
+                </div>
+              )}
+              {openExpert.purpose && (
+                <div className="field">
+                  <span className="field-label">Purpose / what we want from them</span>
+                  <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6 }}>{openExpert.purpose}</p>
+                </div>
+              )}
+              <div className="field-grid-2">
+                {openExpert.email && (<div className="field"><span className="field-label">Email</span><a href={"mailto:" + openExpert.email} style={{ fontSize: 13, color: "#4338ca" }}>{openExpert.email}</a></div>)}
+                {openExpert.phone && (<div className="field"><span className="field-label">Phone</span><span style={{ fontSize: 13, color: "#374151" }}>{openExpert.phone}</span></div>)}
+                {openExpert.meetingDate && (<div className="field"><span className="field-label">Meeting date</span><span style={{ fontSize: 13, color: "#374151" }}>{openExpert.meetingDate}</span></div>)}
+                {openExpert.meetingLink && (<div className="field"><span className="field-label">Meeting link</span><a href={openExpert.meetingLink} target="_blank" rel="noopener" style={{ fontSize: 13, color: "#4338ca" }}>{openExpert.meetingLink}</a></div>)}
+              </div>
+              {openExpert.notes && (
+                <div className="field">
+                  <span className="field-label">Meeting notes</span>
+                  <div style={{ fontSize: 13, color: "#374151", whiteSpace: "pre-wrap", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 12, lineHeight: 1.5 }}>{openExpert.notes}</div>
+                </div>
+              )}
+              {openExpert.attachments && openExpert.attachments.length > 0 && (
+                <div className="field">
+                  <span className="field-label">Attachments</span>
+                  {openExpert.attachments.map((att, i) => (
+                    <div key={i} className="attachment-row">
+                      <span style={{ fontSize: 18 }}>{att.type && att.type.startsWith("audio") ? "🎧" : att.type && att.type.startsWith("image") ? "🖼️" : "📄"}</span>
+                      <a href={att.url} target="_blank" rel="noopener" style={{ flex: 1 }}>{att.name}</a>
+                      <span style={{ color: "#9ca3af", fontSize: 11 }}>{Math.round((att.size||0)/1024)} KB</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="field">
+                <span className="field-label">Email templates — click to copy</span>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {EMAIL_TEMPLATES.map(t => (
+                    <button key={t.id} className="tpl-btn" onClick={() => { const txt = "Subject: " + t.subject + "\n\n" + t.body(openExpert); navigator.clipboard.writeText(txt); setEmailTemplate(t.id); setTimeout(() => setEmailTemplate(null), 2000); }}>{emailTemplate === t.id ? "✓ Copied " + t.label : t.label}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="modal-foot">
+              {openExpert.email && <a className="btn btn-outline" href={"mailto:" + openExpert.email} style={{ textDecoration: "none" }}>✉️ Email</a>}
+              {openExpert.meetingLink && <a className="btn btn-outline" href={openExpert.meetingLink} target="_blank" rel="noopener" style={{ textDecoration: "none" }}>🔗 Meeting</a>}
+              <button className="btn btn-outline" onClick={() => { setEditingExpert({ ...openExpert }); }}>✏️ Edit</button>
+              <button className="btn btn-primary" onClick={() => setOpenExpert(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {editingExpert && (
+        <div className="modal-backdrop" onClick={() => setEditingExpert(null)}>
+          <div className="modal" onClick={ev => ev.stopPropagation()}>
+            <div className="modal-head">
+              <h3 style={{ fontSize: 16, fontWeight: 800, color: "#111827" }}>{editingExpert.id ? "Edit expert" : "Add expert"}</h3>
+              <button onClick={() => setEditingExpert(null)} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="field-grid-2">
+                <div className="field"><label className="field-label">Name</label><input className="field-input" value={editingExpert.name||""} onChange={ev => setEditingExpert({ ...editingExpert, name: ev.target.value })} placeholder="Full name" /></div>
+                <div className="field"><label className="field-label">Status</label><select className="field-select" value={editingExpert.status||"to_contact"} onChange={ev => setEditingExpert({ ...editingExpert, status: ev.target.value })}><option value="to_contact">To contact</option><option value="outreach_sent">Outreach sent</option><option value="scheduled">Scheduled</option><option value="met">Met</option><option value="follow_up">Follow up</option></select></div>
+              </div>
+              <div className="field-grid-2">
+                <div className="field"><label className="field-label">Role / title</label><input className="field-input" value={editingExpert.role||""} onChange={ev => setEditingExpert({ ...editingExpert, role: ev.target.value })} placeholder="e.g. Chief Development Officer" /></div>
+                <div className="field"><label className="field-label">Organisation</label><input className="field-input" value={editingExpert.organization||""} onChange={ev => setEditingExpert({ ...editingExpert, organization: ev.target.value })} placeholder="e.g. NZ LandSAR" /></div>
+              </div>
+              <div className="field"><label className="field-label">Description — who they are</label><textarea className="field-textarea" rows={3} value={editingExpert.description||""} onChange={ev => setEditingExpert({ ...editingExpert, description: ev.target.value })} placeholder="A few sentences on their role and authority." /></div>
+              <div className="field"><label className="field-label">Purpose — what we want from them</label><textarea className="field-textarea" rows={3} value={editingExpert.purpose||""} onChange={ev => setEditingExpert({ ...editingExpert, purpose: ev.target.value })} placeholder="Why we want to talk to them; what we hope to learn or secure." /></div>
+              <div className="field-grid-2">
+                <div className="field"><label className="field-label">Email</label><input className="field-input" type="email" value={editingExpert.email||""} onChange={ev => setEditingExpert({ ...editingExpert, email: ev.target.value })} placeholder="email@example.com" /></div>
+                <div className="field"><label className="field-label">Phone</label><input className="field-input" value={editingExpert.phone||""} onChange={ev => setEditingExpert({ ...editingExpert, phone: ev.target.value })} placeholder="+64 ..." /></div>
+              </div>
+              <div className="field-grid-2">
+                <div className="field"><label className="field-label">Meeting date</label><input className="field-input" type="date" value={editingExpert.meetingDate||""} onChange={ev => setEditingExpert({ ...editingExpert, meetingDate: ev.target.value })} /></div>
+                <div className="field"><label className="field-label">Meeting link</label><input className="field-input" value={editingExpert.meetingLink||""} onChange={ev => setEditingExpert({ ...editingExpert, meetingLink: ev.target.value })} placeholder="Zoom / Teams / Meet URL" /></div>
+              </div>
+              <div className="field"><label className="field-label">Meeting notes</label><textarea className="field-textarea" rows={5} value={editingExpert.notes||""} onChange={ev => setEditingExpert({ ...editingExpert, notes: ev.target.value })} placeholder="Key points, action items, follow-ups..." /></div>
+              <div className="field">
+                <label className="field-label">Attachments (audio recordings, notes, photos)</label>
+                {(editingExpert.attachments||[]).map((att, i) => (
+                  <div key={i} className="attachment-row">
+                    <span style={{ fontSize: 18 }}>{att.type && att.type.startsWith("audio") ? "🎧" : att.type && att.type.startsWith("image") ? "🖼️" : "📄"}</span>
+                    <a href={att.url} target="_blank" rel="noopener" style={{ flex: 1 }}>{att.name}</a>
+                    <button className="tpl-btn" onClick={async () => { if (att.path) await deleteExpertFile(att.path); setEditingExpert({ ...editingExpert, attachments: (editingExpert.attachments||[]).filter((_, j) => j !== i) }); }}>Remove</button>
+                  </div>
+                ))}
+                <input type="file" accept="audio/*,image/*,application/pdf,.txt,.md,.doc,.docx" multiple onChange={async ev => {
+                  const files = Array.from(ev.target.files || []);
+                  if (!files.length) return;
+                  const expertId = editingExpert.id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+                  setUploading(true);
+                  const newAtts = [];
+                  for (const f of files) {
+                    const r = await uploadExpertFile(expertId, f);
+                    if (r) newAtts.push(r);
+                  }
+                  setUploading(false);
+                  setEditingExpert(prev => ({ ...prev, id: expertId, attachments: [...(prev.attachments||[]), ...newAtts] }));
+                  ev.target.value = "";
+                }} style={{ fontSize: 12, marginTop: 6 }} />
+                {uploading && <div style={{ fontSize: 11, color: "#6366f1", marginTop: 6 }}>Uploading…</div>}
+              </div>
+            </div>
+            <div className="modal-foot">
+              {editingExpert.id && (<button className="btn btn-outline" style={{ marginRight: "auto", color: "#dc2626", borderColor: "#fecaca" }} onClick={async () => { if (confirm("Delete this expert and all attachments?")) { await deleteExpertById(editingExpert.id); setEditingExpert(null); setOpenExpert(null); } }}>Delete</button>)}
+              <button className="btn btn-outline" onClick={() => setEditingExpert(null)}>Cancel</button>
+              <button className="btn btn-primary" onClick={async () => { const saved = await saveExpert(editingExpert); setEditingExpert(null); setOpenExpert(saved); }}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
       {active && (
         <div className="panel">
           <div className="panel-header">
