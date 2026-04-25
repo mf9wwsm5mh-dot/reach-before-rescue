@@ -576,7 +576,7 @@ function App() {
         {/* HEADER */}
         <div style={{ background: "#111827", color: "white", padding: "20px 24px" }}>
           <div style={{ maxWidth: 740, margin: "0 auto" }}>
-            <div style={{ fontSize: 11, letterSpacing: 2, color: "#9ca3af", textTransform: "uppercase", marginBottom: 4 }}>Liger Impact Project \u00b7 NZ Government Proposal</div>
+            <div style={{ fontSize: 11, letterSpacing: 2, color: "#9ca3af", textTransform: "uppercase", marginBottom: 4 }}>Liger Impact Project · NZ Government Proposal</div>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
               <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: -0.5 }}>Reach Before Rescue</h1>
               <span className={`sync-pill ${syncStatus}`} title={
@@ -589,7 +589,7 @@ function App() {
                 {syncStatus === "live" ? "Live" : syncStatus === "saving" ? "Saving" : syncStatus === "error" ? "Offline" : "Connecting"}
               </span>
             </div>
-            <p style={{ color: "#9ca3af", fontSize: 13, marginTop: 2 }}>Drone-Assisted SAR \u00b7 Proposal Development Tracker</p>
+            <p style={{ color: "#9ca3af", fontSize: 13, marginTop: 2 }}>Drone-Assisted SAR · Proposal Development Tracker</p>
             <div style={{ marginTop: 16 }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#9ca3af", marginBottom: 4 }}>
                 <span>{done} of {total} items completed</span>
@@ -670,7 +670,7 @@ function App() {
               </div>
             ))}
             <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 16 }}>
-              Reach Before Rescue \u00b7 Sources Library \u00b7 Updated as research is conducted
+              Reach Before Rescue · Sources Library · Updated as research is conducted
             </div>
           </div>
         )}
@@ -702,7 +702,7 @@ function App() {
                     <span style={{ fontSize: 20, flexShrink: 0 }}>{section.icon}</span>
                     <div style={{ minWidth: 0 }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <span style={{ fontSize: 10, color: "#9ca3af", fontFamily: "monospace" }}>\u00a7{section.id}</span>
+                        <span style={{ fontSize: 10, color: "#9ca3af", fontFamily: "monospace" }}>§{section.id}</span>
                         {allDone && <span style={{ fontSize: 10, color: "#16a34a", fontWeight: 700 }}>Complete \u2713</span>}
                       </div>
                       <div style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>{section.title}</div>
@@ -727,7 +727,7 @@ function App() {
                       <span style={{ flex: 1, fontSize: 13, color: isChecked ? "#9ca3af" : "#1f2937", textDecoration: isChecked ? "line-through" : "none" }}>{item.text}</span>
                       {hasAns && !isChecked && <span style={{ fontSize: 10, color: "#6366f1", fontWeight: 600 }}>In progress</span>}
                       <span className={`chip ${TYPE[item.type].chip}`}>{TYPE[item.type].label}</span>
-                      <span style={{ color: "#d1d5db", fontSize: 12 }}>\u203A</span>
+                      <span style={{ color: "#d1d5db", fontSize: 12 }}>›</span>
                     </div>
                   );
                 })}
@@ -735,7 +735,7 @@ function App() {
             );
           })}
           <div style={{ textAlign: "center", fontSize: 11, color: "#d1d5db", paddingTop: 16 }}>
-            Reach Before Rescue \u00b7 Liger Impact Project \u00b7 NZ Government Proposal
+            Reach Before Rescue · Liger Impact Project · NZ Government Proposal
           </div>
         </div>}
       </div>
@@ -745,7 +745,7 @@ function App() {
           <div className="panel-header">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 10, color: "#9ca3af", marginBottom: 2 }}>\u00a7{active.section.id} \u00b7 {active.section.title}</div>
+                <div style={{ fontSize: 10, color: "#9ca3af", marginBottom: 2 }}>§{active.section.id} · {active.section.title}</div>
                 <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.4 }}>{active.item.text}</div>
               </div>
               <button onClick={closePanel} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1, flexShrink: 0, marginTop: 2 }}>\u00d7</button>
