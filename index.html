@@ -125,6 +125,29 @@
     @keyframes recpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 50% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); } }
     .voice-transcript { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; min-height: 90px; font-size: 13px; line-height: 1.6; color: #1f2937; margin-top: 10px; white-space: pre-wrap; }
     .voice-interim { color: #94a3b8; font-style: italic; }
+    .trello-board { display: flex; gap: 14px; overflow-x: auto; padding: 6px 4px 24px; scroll-snap-type: x mandatory; }
+    .trello-col { flex: 0 0 290px; scroll-snap-align: start; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px; max-height: 70vh; display: flex; flex-direction: column; }
+    .trello-col.col-today { background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%); border-color: #818cf8; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.15); }
+    .trello-col.col-power { background: linear-gradient(180deg, #fef3c7 0%, #fffbeb 100%); border-color: #fbbf24; }
+    .col-header { padding: 4px 4px 10px; border-bottom: 1px solid #e2e8f0; margin-bottom: 8px; }
+    .col-day-name { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; }
+    .col-day-num { font-size: 22px; font-weight: 800; color: #111827; line-height: 1.1; }
+    .col-meta { font-size: 11px; color: #4b5563; margin-top: 4px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .col-pill { padding: 2px 7px; border-radius: 999px; background: rgba(99,102,241,0.12); color: #4338ca; font-weight: 700; font-size: 10px; }
+    .col-pill.pill-power { background: rgba(251, 191, 36, 0.25); color: #92400e; }
+    .col-cards { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
+    .trello-card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; font-size: 12px; cursor: pointer; transition: all 0.15s; display: flex; gap: 8px; align-items: flex-start; }
+    .trello-card:hover { border-color: #818cf8; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .trello-card.is-done { opacity: 0.55; }
+    .trello-card.is-done .card-text { text-decoration: line-through; color: #9ca3af; }
+    .trello-card.suggested { border-style: dashed; background: #fafafa; }
+    .card-text { flex: 1; min-width: 0; line-height: 1.4; color: #1f2937; word-wrap: break-word; }
+    .card-sub { font-size: 10px; color: #6b7280; margin-top: 2px; }
+    .col-add { background: transparent; border: 1px dashed #cbd5e1; color: #6366f1; border-radius: 8px; padding: 7px; cursor: pointer; font-size: 12px; font-weight: 600; margin-top: 6px; }
+    .col-add:hover { background: #eef2ff; border-color: #818cf8; }
+    .col-empty { font-size: 11px; color: #9ca3af; text-align: center; padding: 14px 8px; font-style: italic; }
+    .plan-wrap { padding: 24px 20px 60px; max-width: 1400px; margin: 0 auto; }
+    @media (min-width: 1500px) { .plan-wrap { max-width: 1600px; } }
   </style>
 </head>
 <body>
@@ -188,7 +211,6 @@ const POWER_WEEKS = [
   { start: "2026-09-07", end: "2026-09-11", term: 3, week: 8 }
 ];
 const HOLIDAYS = [
-  { start: "2026-04-11", end: "2026-04-26", name: "Term 1-2 break" },
   { start: "2026-07-04", end: "2026-07-19", name: "Term 2-3 break" },
   { start: "2026-09-26", end: "2026-10-11", name: "Term 3-4 break" }
 ];
@@ -229,7 +251,12 @@ const DAY_FOCUS = {
 function getTodaysObjective(dateStr) {
   const phase = getCurrentPhase(dateStr);
   const day = getDayInfo(dateStr);
-  if (!phase) return { phase: null, title: dateStr > PROJECT_END ? "Project delivered — well done." : "Outside project timeline", subtitle: "", hours: 0, day };
+  if (!phase) {
+    if (dateStr > PROJECT_END) return { phase: null, title: "Project delivered — well done.", subtitle: "", hours: 0, day };
+    const next = PHASES.find(p => p.start > dateStr);
+    if (next) return { phase: next, title: "Phase " + next.id + " starts " + next.start, subtitle: next.name + ": " + next.focus, hours: 0, day };
+    return { phase: null, title: "Outside project timeline", subtitle: "", hours: 0, day };
+  }
   if (day.isHoliday) return { phase, title: "School break — rest", subtitle: HOLIDAYS.find(h => dateStr >= h.start && dateStr <= h.end).name, hours: 0, day };
   if (day.isWeekend) return { phase, title: "Weekend — rest", subtitle: "Reset for the week ahead.", hours: 0, day };
   if (day.dow === 3) return { phase, title: "Wednesday — no Impact Project session", subtitle: "Use the day for school / recovery.", hours: 0, day };
@@ -598,6 +625,7 @@ function App() {
   const [criteria, setCriteria] = useState([]);
   const [editingCriterion, setEditingCriterion] = useState(null);
   const [reflections, setReflections] = useState({});
+  const [tasks, setTasks] = useState({});
   const [today, setToday] = useState(() => new Date().toISOString().slice(0, 10));
   const [openDay, setOpenDay] = useState(null);
   const [recording, setRecording] = useState(false);
@@ -649,7 +677,7 @@ function App() {
         setSyncStatus("error");
         return;
       }
-      const c = {}, a = {}, s = [], ex = [], sc = [], refl = {};
+      const c = {}, a = {}, s = [], ex = [], sc = [], refl = {}, td = {};
       for (const row of data || []) {
         if (row.key.startsWith("c:")) c[row.key.slice(2)] = !!row.value;
         else if (row.key.startsWith("a:")) a[row.key.slice(2)] = row.value;
@@ -657,6 +685,16 @@ function App() {
         else if (row.key.startsWith("e:")) ex.push({ id: row.key.slice(2), ...row.value });
         else if (row.key.startsWith("sc:")) sc.push({ id: row.key.slice(3), ...row.value });
         else if (row.key.startsWith("ap:")) refl[row.key.slice(3)] = row.value;
+        else if (row.key.startsWith("td:")) {
+          const rest = row.key.slice(3);
+          const colon = rest.indexOf(":");
+          if (colon > 0) {
+            const date = rest.slice(0, colon);
+            const id = rest.slice(colon + 1);
+            if (!td[date]) td[date] = [];
+            td[date].push({ id, ...row.value });
+          }
+        }
       }
       setChecked(c);
       setAnswers(a);
@@ -664,6 +702,7 @@ function App() {
       setExperts(ex);
       setCriteria(sc);
       setReflections(refl);
+      setTasks(td);
       setSyncStatus("live");
     })();
   }, []);
@@ -684,6 +723,15 @@ function App() {
           else if (k.startsWith("e:")) setExperts(p => p.filter(x => x.id !== k.slice(2)));
           else if (k.startsWith("sc:")) setCriteria(p => p.filter(x => x.id !== k.slice(3)));
           else if (k.startsWith("ap:")) setReflections(p => { const n = { ...p }; delete n[k.slice(3)]; return n; });
+          else if (k.startsWith("td:")) {
+            const rest = k.slice(3);
+            const colon = rest.indexOf(":");
+            if (colon > 0) {
+              const date = rest.slice(0, colon);
+              const id = rest.slice(colon + 1);
+              setTasks(p => ({ ...p, [date]: (p[date] || []).filter(t => t.id !== id) }));
+            }
+          }
         } else {
           if (k.startsWith("c:")) setChecked(p => ({ ...p, [k.slice(2)]: !!row.value }));
           else if (k.startsWith("a:")) setAnswers(p => ({ ...p, [k.slice(2)]: row.value }));
@@ -706,6 +754,15 @@ function App() {
             return next;
           });
           else if (k.startsWith("ap:")) setReflections(p => ({ ...p, [k.slice(3)]: row.value }));
+          else if (k.startsWith("td:")) {
+            const rest = k.slice(3);
+            const colon = rest.indexOf(":");
+            if (colon > 0) {
+              const date = rest.slice(0, colon);
+              const id = rest.slice(colon + 1);
+              setTasks(p => ({ ...p, [date]: [...(p[date] || []).filter(t => t.id !== id), { id, ...row.value }] }));
+            }
+          }
         }
       }
     ).subscribe((status) => {
@@ -760,6 +817,26 @@ function App() {
   const deleteCriterionById = async (id) => {
     setCriteria(prev => prev.filter(x => x.id !== id));
     immediateWrite("sc:" + id, null, true);
+  };
+  const addTaskToDay = async (date) => {
+    const text = window.prompt("New task for " + date + ":");
+    if (!text || !text.trim()) return;
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const task = { id, text: text.trim(), done: false, createdAt: new Date().toISOString() };
+    setTasks(prev => ({ ...prev, [date]: [...(prev[date] || []), task] }));
+    immediateWrite("td:" + date + ":" + id, task, false);
+  };
+  const toggleTaskDone = async (date, id) => {
+    let updated;
+    setTasks(prev => {
+      const list = (prev[date] || []).map(t => { if (t.id === id) { updated = { ...t, done: !t.done }; return updated; } return t; });
+      return { ...prev, [date]: list };
+    });
+    if (updated) immediateWrite("td:" + date + ":" + id, updated, false);
+  };
+  const deleteTaskFromDay = async (date, id) => {
+    setTasks(prev => ({ ...prev, [date]: (prev[date] || []).filter(t => t.id !== id) }));
+    immediateWrite("td:" + date + ":" + id, null, true);
   };
   const saveReflection = async (date, text) => {
     setReflections(prev => ({ ...prev, [date]: text }));
@@ -998,26 +1075,36 @@ function App() {
             )}
           </div>
         )}
-        {/* ACTION PLAN PAGE */}
+        {/* ACTION PLAN PAGE — Trello-style board */}
         {page === "plan" && (() => {
           const obj = getTodaysObjective(today);
-          const weekDays = getThisWeekDays(today);
-          const trackerTasksToday = (() => {
-            if (!obj.phase || obj.hours === 0) return [];
-            const sectionIds = PHASE_SCOPE[obj.phase.id] || [];
-            const tasks = [];
-            for (const sid of sectionIds) {
+          // Compute upcoming working days (next ~14 working days starting from today)
+          const upcoming = [];
+          const start = new Date(today + "T00:00:00");
+          for (let i = 0; i < 30 && upcoming.length < 14; i++) {
+            const d = new Date(start);
+            d.setDate(start.getDate() + i);
+            const ds = fmtDate(d);
+            const di = getDayInfo(ds);
+            if (di.hours > 0 || ds === today) upcoming.push(ds);
+          }
+          const trackerSuggestionsForDay = (date) => {
+            const phase = getCurrentPhase(date);
+            if (!phase) return [];
+            const sids = PHASE_SCOPE[phase.id] || [];
+            const out = [];
+            for (const sid of sids) {
               const sec = SECTIONS.find(s => s.id === sid);
               if (!sec) continue;
               for (const it of sec.items) {
                 const k = sid + "__" + it.text;
-                if (!checked[k]) tasks.push({ sid, item: it, key: k, section: sec });
+                if (!checked[k]) out.push({ key: k, sid, item: it, section: sec });
               }
             }
-            return tasks.slice(0, 8);
-          })();
+            return out;
+          };
           return (
-            <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 20px 60px" }}>
+            <div className="plan-wrap">
               <div className="objective-card">
                 <div className="objective-eyebrow">Today — {today}</div>
                 <div className="objective-title">{obj.title}</div>
@@ -1029,39 +1116,49 @@ function App() {
                   {obj.day.isHoliday && (<span className="objective-pill">School break</span>)}
                 </div>
               </div>
-              {trackerTasksToday.length > 0 && (
-                <div style={{ background: "white", border: "1px solid #e5e7eb", borderRadius: 14, padding: "16px 18px", marginBottom: 22 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 800, color: "#111827", textTransform: "uppercase", letterSpacing: 1 }}>Today's focus — from Tracker</h3>
-                    <span style={{ fontSize: 11, color: "#6b7280" }}>Tick to mark complete in Tracker</span>
-                  </div>
-                  {trackerTasksToday.map(t => (
-                    <div key={t.key} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderTop: "1px solid #f3f4f6" }}>
-                      <input type="checkbox" checked={!!checked[t.key]} onChange={() => toggleCheck(t.sid, t.item.text)} style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#16a34a" }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "#111827" }}>{t.item.text}</div>
-                        <div style={{ fontSize: 11, color: "#6b7280", marginTop: 2 }}>§{t.sid} · {t.section.title} · {t.item.type === "research" ? "Needs Research" : "Needs Development"}</div>
-                      </div>
-                      <button className="tpl-btn" onClick={() => { setPage("tracker"); setActive({ section: t.section, item: t.item }); }}>Open</button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <h3 style={{ fontSize: 14, fontWeight: 800, color: "#374151", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>This week</h3>
-              <div className="week-strip">
-                {weekDays.map(d => {
+              
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 800, color: "#374151", textTransform: "uppercase", letterSpacing: 1 }}>Upcoming work sessions</h3>
+                <span style={{ fontSize: 11, color: "#6b7280" }}>{upcoming.length} working day{upcoming.length !== 1 ? "s" : ""} · click cards to tick · "Reflect" opens day modal</span>
+              </div>
+              <div className="trello-board">
+                {upcoming.map(d => {
                   const info = getDayInfo(d);
-                  const dayObj = getTodaysObjective(d);
+                  const phase = getCurrentPhase(d);
                   const dt = new Date(d + "T00:00:00");
                   const isToday = d === today;
-                  const isOff = info.hours === 0;
-                  const cls = "day-card" + (isToday ? " is-today" : "") + (isOff ? " is-off" : "") + (info.isPowerWeek && !isOff ? " is-power" : "");
+                  const dayTasks = tasks[d] || [];
+                  const trackerSugg = trackerSuggestionsForDay(d).slice(0, 6);
+                  const cls = "trello-col" + (isToday ? " col-today" : "") + (info.isPowerWeek ? " col-power" : "");
                   return (
-                    <div key={d} className={cls} onClick={() => !isOff && setOpenDay(d)}>
-                      <div className="day-name">{info.dayName.slice(0,3)}</div>
-                      <div className="day-date">{dt.getDate()}</div>
-                      {info.hours > 0 ? (<div className="day-hours">{info.hours}h{info.isPowerWeek ? " ⚡" : ""}</div>) : (<div className="day-hours" style={{ color: "#9ca3af" }}>off</div>)}
-                      <div className="day-focus">{isOff ? "" : (DAY_FOCUS[info.dow] || "")}{reflections[d] ? " ✍️" : ""}</div>
+                    <div key={d} className={cls}>
+                      <div className="col-header">
+                        <div className="col-day-name">{info.dayName.slice(0,3)}{isToday ? " — TODAY" : ""}</div>
+                        <div className="col-day-num">{dt.getDate()} <span style={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}>{dt.toLocaleString("en-NZ", { month: "short" })}</span></div>
+                        <div className="col-meta">
+                          <span className="col-pill">{info.hours}h</span>
+                          {info.isPowerWeek && <span className="col-pill pill-power">⚡ Power</span>}
+                          {phase && <span className="col-pill">P{phase.id} · {phase.name}</span>}
+                        </div>
+                      </div>
+                      <div className="col-cards">
+                        {dayTasks.map(t => (
+                          <div key={t.id} className={"trello-card" + (t.done ? " is-done" : "")}>
+                            <input type="checkbox" checked={t.done} onChange={() => toggleTaskDone(d, t.id)} style={{ marginTop: 2 }} />
+                            <div className="card-text">{t.text}</div>
+                            <button onClick={(ev) => { ev.stopPropagation(); if (confirm("Remove task?")) deleteTaskFromDay(d, t.id); }} style={{ background: "none", border: "none", color: "#cbd5e1", cursor: "pointer", fontSize: 14, padding: 0 }}>×</button>
+                          </div>
+                        ))}
+                        {trackerSugg.map(s => (
+                          <div key={s.key} className={"trello-card suggested" + (checked[s.key] ? " is-done" : "")} onClick={() => toggleCheck(s.sid, s.item.text)}>
+                            <input type="checkbox" checked={!!checked[s.key]} readOnly style={{ marginTop: 2 }} />
+                            <div className="card-text">{s.item.text}<div className="card-sub">§{s.sid} · {s.section.title} · {s.item.type === "research" ? "Research" : "Develop"}</div></div>
+                          </div>
+                        ))}
+                        {dayTasks.length === 0 && trackerSugg.length === 0 && (<div className="col-empty">No tasks yet</div>)}
+                      </div>
+                      <button className="col-add" onClick={() => addTaskToDay(d)}>+ Add task</button>
+                      <button className="col-add" style={{ marginTop: 4 }} onClick={() => setOpenDay(d)}>✍️ Reflect</button>
                     </div>
                   );
                 })}
