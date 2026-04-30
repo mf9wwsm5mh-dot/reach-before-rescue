@@ -190,41 +190,86 @@
     .ev-item:hover { border-color: #818cf8; }
     .ev-item-title { font-size: 13px; font-weight: 600; color: #1f2937; }
     .ev-item-meta { font-size: 11px; color: #6b7280; margin-top: 2px; }
-    /* Carrot Cake Success Criteria */
-    .cake-wrap { padding: 24px 20px 60px; max-width: 1100px; margin: 0 auto; background: linear-gradient(180deg, #fef9e7 0%, #faf2dc 100%); border-radius: 18px; }
-    .cake-stage { display: grid; grid-template-columns: 80px 1fr 80px; gap: 16px; align-items: start; margin-top: 16px; }
+    /* Carrot Cake Success Criteria — Cartoon Edition */
+    .cake-wrap { padding: 24px 20px 60px; max-width: 1100px; margin: 0 auto; background: radial-gradient(ellipse at top, #fff8e1 0%, #fce8b6 60%, #f6d68a 100%); border-radius: 22px; position: relative; overflow: hidden; }
+    .cake-wrap::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+      background-image:
+        radial-gradient(circle at 8% 18%, #ff8a3d 4px, transparent 5px),
+        radial-gradient(circle at 92% 12%, #ffb74d 3px, transparent 4px),
+        radial-gradient(circle at 18% 88%, #f48fb1 3px, transparent 4px),
+        radial-gradient(circle at 80% 92%, #81c784 3px, transparent 4px),
+        radial-gradient(circle at 50% 6%, #ffd54f 4px, transparent 5px);
+    }
+    .cake-stage { display: grid; grid-template-columns: 100px 1fr 100px; gap: 14px; align-items: start; margin-top: 16px; position: relative; z-index: 1; }
     @media (max-width: 700px) { .cake-stage { grid-template-columns: 1fr; } .cake-side-l, .cake-side-r { display: none; } }
-    .cake-side-l, .cake-side-r { padding-top: 80px; opacity: 0.85; display: flex; flex-direction: column; gap: 18px; align-items: center; }
-    .cake-stack { display: flex; flex-direction: column; }
-    .cake-frosting { background: linear-gradient(180deg, #fffbe7 0%, #fbf3d4 50%, #f5e8b8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; padding: 18px 24px; position: relative; box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), inset 0 -2px 4px rgba(0,0,0,0.04); }
-    .cake-top { border-radius: 36% 36% 8px 8px / 60px 60px 8px 8px; border-top: none; padding-top: 32px; padding-bottom: 24px; }
-    .cake-top::before { content: ""; position: absolute; top: -10px; left: 8%; right: 8%; height: 22px; background: linear-gradient(180deg, #fffbe7 0%, #fbf3d4 100%); border-radius: 80% 70% 60% 90% / 100% 100% 0 0; box-shadow: inset 0 -2px 3px rgba(0,0,0,0.04); }
-    .cake-top::after { content: "\u{1F95C}\u2003\u{1F955}\u2003\u{1F95C}"; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); font-size: 28px; }
-    .cake-bottom { border-radius: 8px 8px 18px 18px; border-bottom: 4px solid #d4a574; padding-bottom: 22px; }
-    .cake-frosting-thin { height: 14px; background: linear-gradient(180deg, #fdf6d8 0%, #f5e8b8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; margin: -1px 0; box-shadow: inset 0 2px 3px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.05); position: relative; }
-    .cake-goal-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #b8860b; }
-    .cake-goal-text { font-size: 16px; font-weight: 800; color: #5d3a0d; line-height: 1.3; margin-top: 4px; max-width: 720px; }
-    .cake-goal-sub { font-size: 12px; color: #7c5a2a; margin-top: 6px; line-height: 1.5; max-width: 720px; }
-    .cake-layer { position: relative; cursor: pointer; transition: all 0.25s; overflow: hidden; }
-    .cake-layer-bar { display: flex; align-items: center; gap: 12px; padding: 18px 24px; color: #fff7ec; position: relative; z-index: 2; }
-    .cake-layer-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.4); font-size: 13px; font-weight: 800; flex-shrink: 0; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-    .cake-layer-title { flex: 1; font-size: 15px; font-weight: 800; line-height: 1.3; text-shadow: 0 1px 2px rgba(0,0,0,0.25); min-width: 0; }
-    .cake-layer-meta { font-size: 11px; opacity: 0.85; white-space: nowrap; }
-    .cake-layer-arrow { font-size: 14px; opacity: 0.85; }
-    .cake-layer-bg { position: absolute; inset: 0; z-index: 1; background-image: radial-gradient(circle at 8% 22%, #6d4423 2.5px, transparent 3.5px), radial-gradient(circle at 22% 65%, #f5a05f 3px, transparent 4px), radial-gradient(circle at 38% 30%, #8b6347 2px, transparent 3px), radial-gradient(circle at 52% 70%, #6d4423 2.5px, transparent 3.5px), radial-gradient(circle at 68% 35%, #f5a05f 2px, transparent 3px), radial-gradient(circle at 82% 60%, #8b6347 2.5px, transparent 3.5px), radial-gradient(circle at 92% 25%, #f5a05f 2.5px, transparent 3.5px); pointer-events: none; opacity: 0.65; }
-    .cake-layer:hover .cake-layer-bg { opacity: 0.8; }
-    .cake-layer:hover { filter: brightness(1.05); }
-    .cake-layer-detail { background: linear-gradient(180deg, #fffbed 0%, #fcf3d8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; padding: 18px 24px; }
-    .cake-layer-subtitle { font-size: 12px; color: #7c5a2a; margin-bottom: 12px; font-style: italic; }
-    .cake-test { background: white; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #e8d394; box-shadow: 0 2px 4px rgba(166, 112, 63, 0.06); cursor: pointer; transition: all 0.2s; }
-    .cake-test:hover { border-color: #c08552; box-shadow: 0 4px 10px rgba(166, 112, 63, 0.12); transform: translateX(3px); }
-    .cake-test-name { font-size: 14px; font-weight: 800; color: #5d3a0d; }
-    .cake-test-desc { font-size: 12px; color: #4b5563; line-height: 1.5; margin-top: 6px; }
-    .cake-test-criteria { display: none; margin-top: 10px; }
-    .cake-test.expanded .cake-test-criteria { display: block; }
-    .cake-test-toggle { display: inline-block; font-size: 11px; font-weight: 700; color: #b8860b; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    .cake-side-svg { width: 60px; height: auto; }
-    .cake-walnut { width: 30px; height: 30px; margin: 4px; }
+    .cake-side-l, .cake-side-r { padding-top: 120px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+    .cake-side-l > *, .cake-side-r > * { animation: bob 4s ease-in-out infinite; }
+    .cake-side-l > *:nth-child(2) { animation-delay: 1s; }
+    .cake-side-r > *:nth-child(2) { animation-delay: 1.5s; }
+    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+    .cake-stack { display: flex; flex-direction: column; filter: drop-shadow(0 14px 24px rgba(166, 112, 63, 0.25)); }
+    .cake-decorations-row { position: relative; height: 70px; margin-bottom: -22px; z-index: 5; display: flex; justify-content: center; align-items: flex-end; gap: 18px; pointer-events: none; }
+    .cake-deco { font-size: 44px; line-height: 1; transform-origin: bottom center; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15)); animation: wiggle 3.6s ease-in-out infinite; }
+    .cake-deco:nth-child(1) { transform: rotate(-12deg); animation-delay: 0s; }
+    .cake-deco:nth-child(2) { transform: rotate(4deg); font-size: 56px; animation-delay: 0.3s; }
+    .cake-deco:nth-child(3) { transform: rotate(8deg); animation-delay: 0.7s; }
+    .cake-deco:nth-child(4) { transform: rotate(-6deg); font-size: 36px; animation-delay: 1.0s; }
+    .cake-deco:nth-child(5) { transform: rotate(14deg); animation-delay: 1.4s; }
+    @keyframes wiggle { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-4px) rotate(calc(var(--r, 0deg) + 6deg)); } }
+    .cake-frosting { background: linear-gradient(180deg, #fffae0 0%, #faecbb 50%, #f0d488 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; padding: 22px 28px; position: relative; box-shadow: inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -3px 5px rgba(166,112,63,0.12); }
+    .cake-top { border-radius: 50% 50% 10px 10px / 70px 70px 10px 10px; border-top: 4px solid #d4a574; padding-top: 36px; padding-bottom: 26px; position: relative; }
+    .cake-top::before { content: ""; position: absolute; bottom: -8px; left: 0; right: 0; height: 20px;
+      background-image: radial-gradient(circle at 8% 0%, #fffae0 12px, transparent 13px), radial-gradient(circle at 22% 0%, #fffae0 9px, transparent 10px), radial-gradient(circle at 38% 0%, #fffae0 14px, transparent 15px), radial-gradient(circle at 52% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 66% 0%, #fffae0 13px, transparent 14px), radial-gradient(circle at 80% 0%, #fffae0 10px, transparent 11px), radial-gradient(circle at 92% 0%, #fffae0 12px, transparent 13px);
+      filter: drop-shadow(0 2px 1px rgba(166,112,63,0.15));
+    }
+    .cake-bottom { border-radius: 10px 10px 30% 30% / 10px 10px 50px 50px; border-bottom: 5px solid #b87a3f; padding-top: 22px; padding-bottom: 28px; position: relative; }
+    .cake-bottom::after { content: ""; position: absolute; top: -8px; left: 0; right: 0; height: 18px;
+      background-image: radial-gradient(circle at 10% 100%, #fffae0 11px, transparent 12px), radial-gradient(circle at 26% 100%, #fffae0 8px, transparent 9px), radial-gradient(circle at 42% 100%, #fffae0 13px, transparent 14px), radial-gradient(circle at 58% 100%, #fffae0 9px, transparent 10px), radial-gradient(circle at 74% 100%, #fffae0 12px, transparent 13px), radial-gradient(circle at 90% 100%, #fffae0 10px, transparent 11px);
+    }
+    .cake-plate { height: 22px; margin: 0 -16px; background: radial-gradient(ellipse at center, #f8c8d6 0%, #e89aaf 70%, #d77b95 100%); border-radius: 50% / 100%; box-shadow: 0 8px 22px rgba(166, 112, 63, 0.35), inset 0 -3px 6px rgba(0,0,0,0.12), inset 0 2px 4px rgba(255,255,255,0.5); position: relative; z-index: -1; margin-top: -2px; }
+    .cake-frosting-thin { height: 18px; background: linear-gradient(180deg, #fffae0 0%, #f8e4a8 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; margin: -2px 0; box-shadow: inset 0 2px 3px rgba(255,255,255,0.6), inset 0 -2px 3px rgba(166,112,63,0.1); position: relative; }
+    .cake-frosting-thin::before { content: ""; position: absolute; bottom: -10px; left: 0; right: 0; height: 14px;
+      background-image: radial-gradient(circle at 6% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 18% 0%, #fffae0 11px, transparent 12px), radial-gradient(circle at 32% 0%, #fffae0 7px, transparent 8px), radial-gradient(circle at 46% 0%, #fffae0 9px, transparent 10px), radial-gradient(circle at 60% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 74% 0%, #fffae0 10px, transparent 11px), radial-gradient(circle at 88% 0%, #fffae0 8px, transparent 9px);
+      filter: drop-shadow(0 1px 1px rgba(166,112,63,0.12));
+    }
+    .cake-goal-eyebrow { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: #d97706; text-shadow: 0 1px 2px rgba(255,255,255,0.6); }
+    .cake-goal-text { font-size: 18px; font-weight: 900; color: #4a2a05; line-height: 1.35; margin-top: 6px; max-width: 720px; }
+    .cake-goal-sub { font-size: 12px; color: #7c5a2a; margin-top: 8px; line-height: 1.5; max-width: 720px; font-style: italic; }
+    .cake-layer { position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; }
+    .cake-layer:hover { transform: scale(1.012); filter: brightness(1.1) saturate(1.15); }
+    .cake-layer-bar { display: flex; align-items: center; gap: 14px; padding: 22px 26px; color: #fff7ec; position: relative; z-index: 3; }
+    .cake-layer-num { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(255,255,255,0.1)); border: 3px solid rgba(255,255,255,0.55); font-size: 16px; font-weight: 900; flex-shrink: 0; text-shadow: 0 2px 3px rgba(0,0,0,0.3); box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.2); }
+    .cake-layer-title { flex: 1; font-size: 16px; font-weight: 900; line-height: 1.3; text-shadow: 0 2px 3px rgba(0,0,0,0.3); min-width: 0; letter-spacing: -0.2px; }
+    .cake-layer-meta { font-size: 12px; font-weight: 700; opacity: 0.95; white-space: nowrap; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 999px; backdrop-filter: blur(2px); }
+    .cake-layer-arrow { font-size: 16px; opacity: 0.95; transition: transform 0.3s; }
+    .cake-layer-bg { position: absolute; inset: 0; z-index: 1; background-image:
+      radial-gradient(circle at 6% 22%, #ff8a3d 4px, transparent 5px),
+      radial-gradient(circle at 14% 65%, #6d4423 3px, transparent 4px),
+      radial-gradient(circle at 24% 30%, #ffb74d 3.5px, transparent 4.5px),
+      radial-gradient(circle at 34% 78%, #8b6347 3px, transparent 4px),
+      radial-gradient(circle at 46% 35%, #ff8a3d 4px, transparent 5px),
+      radial-gradient(circle at 56% 70%, #6d4423 3px, transparent 4px),
+      radial-gradient(circle at 68% 25%, #ffb74d 3.5px, transparent 4.5px),
+      radial-gradient(circle at 78% 60%, #8b6347 3px, transparent 4px),
+      radial-gradient(circle at 88% 35%, #ff8a3d 4px, transparent 5px),
+      radial-gradient(circle at 96% 75%, #6d4423 3px, transparent 4px);
+      pointer-events: none; opacity: 0.85;
+    }
+    .cake-layer-shine { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.12) 100%); }
+    .cake-layer-detail { background: linear-gradient(180deg, #fffbed 0%, #fcf3d8 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; padding: 22px 26px; }
+    .cake-layer-subtitle { font-size: 12px; color: #7c5a2a; margin-bottom: 14px; font-style: italic; font-weight: 600; }
+    .cake-test { background: white; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; border: 2px solid #e8d394; box-shadow: 0 3px 6px rgba(166, 112, 63, 0.08); cursor: pointer; transition: all 0.2s; }
+    .cake-test:hover { border-color: #ff8a3d; box-shadow: 0 6px 14px rgba(255, 138, 61, 0.18); transform: translateY(-2px); }
+    .cake-test-name { font-size: 15px; font-weight: 900; color: #4a2a05; letter-spacing: -0.2px; }
+    .cake-test-desc { font-size: 12px; color: #4b5563; line-height: 1.55; margin-top: 8px; }
+    .cake-test-criteria { display: none; margin-top: 12px; }
+    .cake-test.expanded .cake-test-criteria { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .cake-test-toggle { display: inline-block; font-size: 11px; font-weight: 800; color: #d97706; margin-top: 10px; text-transform: uppercase; letter-spacing: 1.2px; }
+    .cake-test:hover .cake-test-toggle { color: #ea580c; }
+    .cake-side-svg { width: 70px; height: auto; }
+    .cake-walnut-svg { width: 36px; height: 36px; }
+    .cake-emoji-side { font-size: 50px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(166,112,63,0.3)); }
   </style>
 </head>
 <body>
@@ -1439,17 +1484,18 @@ function App() {
             </div>
             <div className="cake-stage">
               <div className="cake-side-l">
-                <svg className="cake-side-svg" viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">
-                  <ellipse cx="30" cy="78" rx="14" ry="22" fill="#ee7d3a" />
-                  <ellipse cx="30" cy="78" rx="11" ry="19" fill="#f48b4a" />
-                  <path d="M30,55 L25,40 L20,30 M30,55 L30,38 L26,28 M30,55 L36,40 L40,32" stroke="#3f7028" strokeWidth="3" strokeLinecap="round" fill="none" />
-                </svg>
-                <svg className="cake-walnut" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                  <ellipse cx="15" cy="15" rx="12" ry="10" fill="#8b5a2b" />
-                  <path d="M15,5 L15,25 M5,15 L25,15 M8,8 Q15,12 22,8 M8,22 Q15,18 22,22" stroke="#5d3a1a" strokeWidth="1" fill="none" />
-                </svg>
+                <span className="cake-emoji-side">🥕</span>
+                <span className="cake-emoji-side">🍯</span>
+                <span className="cake-emoji-side">🌟</span>
               </div>
               <div className="cake-stack">
+                <div className="cake-decorations-row">
+                  <span className="cake-deco">🥜</span>
+                  <span className="cake-deco">🥕</span>
+                  <span className="cake-deco">🥥</span>
+                  <span className="cake-deco">🌿</span>
+                  <span className="cake-deco">🥜</span>
+                </div>
                 <div className="cake-frosting cake-top">
                   <div className="cake-goal-eyebrow">🎯 The Goal</div>
                   <div className="cake-goal-text">An actionable, sound, parliament-ready proposal — that secures funding and becomes implemented capability.</div>
@@ -1461,6 +1507,7 @@ function App() {
                     <React.Fragment key={layer.id}>
                       <div className="cake-layer" style={{ background: "linear-gradient(180deg, " + layer.sponge + " 0%, " + layer.sponge_dark + " 100%)" }} onClick={() => { setOpenLayer(isOpen ? null : layer.id); setOpenTest(null); }}>
                         <div className="cake-layer-bg" />
+                        <div className="cake-layer-shine" />
                         <div className="cake-layer-bar">
                           <span className="cake-layer-num">{idx + 1}</span>
                           <span className="cake-layer-title">{layer.title}</span>
@@ -1497,17 +1544,12 @@ function App() {
                   <div className="cake-goal-eyebrow">🪩 Foundation</div>
                   <div className="cake-goal-text">The same goal — anchored. The proposal lands in Parliament; the capability lands in the Wakatipu basin; lives are saved that would otherwise have been lost.</div>
                 </div>
+                <div className="cake-plate" />
               </div>
               <div className="cake-side-r">
-                <svg className="cake-side-svg" viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">
-                  <ellipse cx="30" cy="78" rx="14" ry="22" fill="#ee7d3a" />
-                  <ellipse cx="30" cy="78" rx="11" ry="19" fill="#f48b4a" />
-                  <path d="M30,55 L24,40 L20,32 M30,55 L30,38 L34,28 M30,55 L37,40 L42,30" stroke="#3f7028" strokeWidth="3" strokeLinecap="round" fill="none" />
-                </svg>
-                <svg className="cake-walnut" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                  <ellipse cx="15" cy="15" rx="12" ry="10" fill="#8b5a2b" />
-                  <path d="M15,5 L15,25 M5,15 L25,15 M8,8 Q15,12 22,8 M8,22 Q15,18 22,22" stroke="#5d3a1a" strokeWidth="1" fill="none" />
-                </svg>
+                <span className="cake-emoji-side">🥜</span>
+                <span className="cake-emoji-side">✨</span>
+                <span className="cake-emoji-side">🍰</span>
               </div>
             </div>
             <div style={{ textAlign: "center", marginTop: 24, fontSize: 11, color: "#a07a3a", fontStyle: "italic" }}>The criteria embedded in this cake replace the earlier flat SMART list — they are deliberately specific, action-oriented, and grounded in the methods you can actually run.</div>
