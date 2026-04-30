@@ -148,6 +148,48 @@
     .col-empty { font-size: 11px; color: #9ca3af; text-align: center; padding: 14px 8px; font-style: italic; }
     .plan-wrap { padding: 24px 20px 60px; max-width: 1400px; margin: 0 auto; }
     @media (min-width: 1500px) { .plan-wrap { max-width: 1600px; } }
+    /* Investigation Bucket */
+    .iv-wrap { padding: 24px 20px 60px; max-width: 1400px; margin: 0 auto; }
+    @media (min-width: 1500px) { .iv-wrap { max-width: 1600px; } }
+    .bucket-stage { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; margin-bottom: 28px; }
+    @media (max-width: 900px) { .bucket-stage { grid-template-columns: 1fr; } }
+    .bucket-svg { width: 280px; height: 320px; margin: 0 auto; display: block; }
+    .bucket-glass { fill: rgba(99, 102, 241, 0.08); stroke: #6366f1; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .bucket-water { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .bucket-wave { animation: wave 3s ease-in-out infinite; }
+    @keyframes wave { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
+    .bucket-droplet { animation: drip 2.6s ease-in infinite; opacity: 0; }
+    @keyframes drip { 0% { transform: translateY(-10px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; transform: translateY(80px); } 100% { transform: translateY(120px); opacity: 0; } }
+    .bucket-droplet:nth-child(2) { animation-delay: 0.7s; }
+    .bucket-droplet:nth-child(3) { animation-delay: 1.4s; }
+    .bucket-droplet:nth-child(4) { animation-delay: 2.0s; }
+    .grade-banner { display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; border-radius: 14px; }
+    .grade-na { background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%); border: 1px solid #fca5a5; color: #991b1b; }
+    .grade-ach { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border: 1px solid #fcd34d; color: #92400e; }
+    .grade-merit { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); border: 1px solid #93c5fd; color: #1e40af; }
+    .grade-exc { background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%); border: 1px solid #86efac; color: #14532d; box-shadow: 0 8px 24px rgba(34,197,94,0.18); }
+    .grade-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
+    .grade-name { font-size: 28px; font-weight: 800; line-height: 1.1; }
+    .grade-desc { font-size: 12px; line-height: 1.5; opacity: 0.85; margin-top: 4px; }
+    .grade-scale { display: flex; gap: 4px; margin-top: 10px; }
+    .grade-scale-pip { flex: 1; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.08); }
+    .grade-scale-pip.filled { background: currentColor; opacity: 0.85; }
+    .oq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .oq-card { background: white; border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.15s; border-top: 4px solid; }
+    .oq-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    .oq-card-topic { font-size: 16px; font-weight: 800; color: #111827; }
+    .oq-card-sub { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .oq-card-rq { font-size: 12px; color: #374151; line-height: 1.5; margin-top: 10px; }
+    .oq-evolved { font-size: 10px; font-weight: 700; color: #6366f1; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .ev-cat { background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+    .ev-cat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ev-cat-title { font-size: 14px; font-weight: 800; color: #111827; }
+    .ev-cat-count { font-size: 11px; color: #6b7280; }
+    .ev-list { display: flex; flex-direction: column; gap: 6px; }
+    .ev-item { padding: 8px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .ev-item:hover { border-color: #818cf8; }
+    .ev-item-title { font-size: 13px; font-weight: 600; color: #1f2937; }
+    .ev-item-meta { font-size: 11px; color: #6b7280; margin-top: 2px; }
   </style>
 </head>
 <body>
@@ -195,6 +237,91 @@ const EMAIL_TEMPLATES = [
 ];
 
 // ---- Project schedule constants ----
+// ---- Original 5 inquiry buckets (uploaded screenshots, April 2026) ----
+// These are the questions that drove the Investigation phase before the proposal expanded to 15 sections.
+const ORIGINAL_QUESTIONS = [
+  {
+    id: "oq-safety", topic: "Safety", subtitle: "Operational risk, mitigation, and deployment procedures",
+    color: "#dc2626",
+    research_question: "How can a drone-assisted micro-aid delivery system be designed and operated safely for stranded hikers, rescuers, and the surrounding environment?",
+    inquiry_questions: [
+      "What are the main operational risks involved in flying drones in alpine rescue environments?",
+      "How could risks such as crashes, missed drops, weather failure, or interference with rescue teams be reduced?",
+      "What safety procedures, training requirements, and emergency protocols would be needed before deployment?"
+    ],
+    research_methods: [
+      "Risk assessment matrix identifying hazards, likelihood, impact, and mitigation strategies.",
+      "Consultation with SAR experts and drone specialists to validate safety procedures and protocols."
+    ],
+    evolved_into: [3, 4, 6, 9, 10],
+    evolution_note: "Expanded from one bucket into five distinct sections: §3 Solution mechanics, §4 Technical Validation, §6 Regulatory Pathway, §9 Risk Register, §10 Implementation Roadmap. Each gets dedicated treatment rather than being collapsed under \u201Csafety.\u201D"
+  },
+  {
+    id: "oq-regulatory", topic: "Regulatory", subtitle: "Legal pathways, permissions, and aviation compliance",
+    color: "#0891b2",
+    research_question: "How can a drone-assisted micro-aid delivery system operate legally and realistically within New Zealand's aviation and emergency-response regulations?",
+    inquiry_questions: [
+      "What are the key Civil Aviation Authority requirements under Part 101, and when would Part 102 be needed for this project?",
+      "What permissions or partnerships would be required from local stakeholders such as SAR teams, DOC, QLDC, or airspace authorities?",
+      "What legal limitations could affect autonomous flight, beyond-visual-line-of-sight operations, or payload drops in alpine environments?"
+    ],
+    research_methods: [
+      "Review CAA regulations, operational guidance, and relevant drone policy documents.",
+      "Conduct expert interviews with drone operators, SAR personnel, and aviation/regulatory specialists."
+    ],
+    evolved_into: [6, 8],
+    evolution_note: "Stayed substantially intact. Now §6 Regulatory Pathway (Part 101 \u2192 102 timeline, BVLOS, airspace deconfliction) plus §8 Stakeholder Alignment (CAA + LandSAR + Police engagement)."
+  },
+  {
+    id: "oq-stakeholders", topic: "Stakeholders", subtitle: "People, organisations, and groups involved in or affected by the project",
+    color: "#7c3aed",
+    research_question: "Who are the most important stakeholders in a drone-assisted alpine rescue system, and what does each group need from the solution for it to succeed?",
+    inquiry_questions: [
+      "Which stakeholders would directly use, approve, fund, or be affected by the system?",
+      "What concerns, priorities, and success criteria do SAR teams, local government, and outdoor users have?",
+      "How could collaboration between these groups improve adoption, trust, and long-term implementation?"
+    ],
+    research_methods: [
+      "Stakeholder mapping and categorisation by influence, interest, and role.",
+      "Semi-structured interviews or surveys with SAR teams, government representatives, and outdoor recreation groups."
+    ],
+    evolved_into: [8, 11, 13],
+    evolution_note: "Expanded from one bucket into three sections: §8 Stakeholder Alignment, §11 Governance & Accountability, §13 Political Alignment. Stakeholder \u201Cmapping\u201D became operational engagement strategy plus governance structure plus parliamentary framing."
+  },
+  {
+    id: "oq-cost", topic: "Cost", subtitle: "Budget, implementation cost, and financial feasibility",
+    color: "#d97706",
+    research_question: "What would it cost to develop, test, and potentially implement a drone-assisted micro-aid delivery programme in the Queenstown region?",
+    inquiry_questions: [
+      "What are the estimated start-up costs for drones, payload systems, software, training, maintenance, and compliance?",
+      "How do these costs compare with the potential benefits, such as faster response times or reduced pressure on rescue resources?",
+      "What funding models, sponsorships, or public-private partnerships could make the programme financially viable?"
+    ],
+    research_methods: [
+      "Cost-benefit analysis using quotes, price comparisons, and projected operating costs.",
+      "Case-study analysis of comparable SAR drone programmes or emergency drone initiatives."
+    ],
+    evolved_into: [7, 14],
+    evolution_note: "Pivoted from single \u201Ccost\u201D bucket to a dedicated economic case (§7) plus a structured funding ask (§14). Cost-benefit became a quantitative model anchored against NZ helicopter operating costs."
+  },
+  {
+    id: "oq-tech", topic: "Technology / Effectiveness", subtitle: "Technical suitability, delivery performance, and practical outcomes",
+    color: "#059669",
+    research_question: "How effective and practical would drone technology be for delivering micro-aid to stranded hikers before rescuers arrive?",
+    inquiry_questions: [
+      "What drone platform, payload design, and delivery method would be most suitable for alpine SAR scenarios?",
+      "How would weather, terrain, signal strength, battery life, and payload weight affect performance?",
+      "To what extent could the system meaningfully reduce response delays or improve survival outcomes in real emergencies?"
+    ],
+    research_methods: [
+      "Prototype testing and simulated field trials in relevant outdoor conditions.",
+      "Technical comparison of drone platforms, payload options, and delivery approaches."
+    ],
+    evolved_into: [3, 4, 5, 15],
+    evolution_note: "Expanded into solution overview (§3), technical validation (§4), international precedents that proved feasibility (§5), and a comprehensive technical appendix (§15). \u201CMicro-aid delivery\u201D specifically also broadened to include detection \u2014 finding subjects fast, not just delivering supplies."
+  }
+];
+
 const PROJECT_END = "2026-10-30";
 const PHASES = [
   { id: 1, name: "Foundation", start: "2026-04-27", end: "2026-05-29", focus: "Track B develop items, expert interviews, source verification", color: "#6366f1" },
@@ -626,6 +753,9 @@ function App() {
   const [editingCriterion, setEditingCriterion] = useState(null);
   const [reflections, setReflections] = useState({});
   const [tasks, setTasks] = useState({});
+  const [evidence, setEvidence] = useState([]);
+  const [editingEvidence, setEditingEvidence] = useState(null);
+  const [openOQ, setOpenOQ] = useState(null);
   const [today, setToday] = useState(() => new Date().toISOString().slice(0, 10));
   const [openDay, setOpenDay] = useState(null);
   const [recording, setRecording] = useState(false);
@@ -677,7 +807,7 @@ function App() {
         setSyncStatus("error");
         return;
       }
-      const c = {}, a = {}, s = [], ex = [], sc = [], refl = {}, td = {};
+      const c = {}, a = {}, s = [], ex = [], sc = [], refl = {}, td = {}, ev = [];
       for (const row of data || []) {
         if (row.key.startsWith("c:")) c[row.key.slice(2)] = !!row.value;
         else if (row.key.startsWith("a:")) a[row.key.slice(2)] = row.value;
@@ -685,6 +815,7 @@ function App() {
         else if (row.key.startsWith("e:")) ex.push({ id: row.key.slice(2), ...row.value });
         else if (row.key.startsWith("sc:")) sc.push({ id: row.key.slice(3), ...row.value });
         else if (row.key.startsWith("ap:")) refl[row.key.slice(3)] = row.value;
+        else if (row.key.startsWith("iv:")) ev.push({ id: row.key.slice(3), ...row.value });
         else if (row.key.startsWith("td:")) {
           const rest = row.key.slice(3);
           const colon = rest.indexOf(":");
@@ -703,6 +834,7 @@ function App() {
       setCriteria(sc);
       setReflections(refl);
       setTasks(td);
+      setEvidence(ev);
       setSyncStatus("live");
     })();
   }, []);
@@ -722,6 +854,7 @@ function App() {
           else if (k.startsWith("s:")) setUserSources(p => p.filter(x => x.id !== k.slice(2)));
           else if (k.startsWith("e:")) setExperts(p => p.filter(x => x.id !== k.slice(2)));
           else if (k.startsWith("sc:")) setCriteria(p => p.filter(x => x.id !== k.slice(3)));
+          else if (k.startsWith("iv:")) setEvidence(p => p.filter(x => x.id !== k.slice(3)));
           else if (k.startsWith("ap:")) setReflections(p => { const n = { ...p }; delete n[k.slice(3)]; return n; });
           else if (k.startsWith("td:")) {
             const rest = k.slice(3);
@@ -748,6 +881,12 @@ function App() {
             return next;
           });
           else if (k.startsWith("sc:")) setCriteria(p => {
+            const id = k.slice(3);
+            const next = p.filter(x => x.id !== id);
+            next.push({ id, ...row.value });
+            return next;
+          });
+          else if (k.startsWith("iv:")) setEvidence(p => {
             const id = k.slice(3);
             const next = p.filter(x => x.id !== id);
             next.push({ id, ...row.value });
@@ -817,6 +956,17 @@ function App() {
   const deleteCriterionById = async (id) => {
     setCriteria(prev => prev.filter(x => x.id !== id));
     immediateWrite("sc:" + id, null, true);
+  };
+  const saveEvidence = async (ev) => {
+    const id = ev.id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+    const updated = { ...ev, id, updatedAt: new Date().toISOString() };
+    setEvidence(prev => { const others = prev.filter(x => x.id !== id); return [...others, updated]; });
+    immediateWrite("iv:" + id, updated, false);
+    return updated;
+  };
+  const deleteEvidenceById = async (id) => {
+    setEvidence(prev => prev.filter(x => x.id !== id));
+    immediateWrite("iv:" + id, null, true);
   };
   const addTaskToDay = async (date) => {
     const text = window.prompt("New task for " + date + ":");
@@ -955,7 +1105,7 @@ function App() {
               <div className="stat-box" style={{ background: "rgba(34,197,94,0.15)" }}><div className="stat-num" style={{ color: "#86efac" }}>{done}/{total}</div><div className="stat-label" style={{ color: "#4ade80" }}>Complete</div></div>
             </div>
             <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
-              {[["tracker","\u{1F4CB} Tracker"],["sources","\u{1F4DA} Sources"],["experts","\u{1F465} Experts"],["success","\u{1F3AF} Success Criteria"],["plan","\u{1F4C5} Action Plan"]].map(([p, label]) => (
+              {[["tracker","\u{1F4CB} Tracker"],["sources","\u{1F4DA} Sources"],["experts","\u{1F465} Experts"],["success","\u{1F3AF} Success Criteria"],["plan","\u{1F4C5} Action Plan"],["investigation","\u{1F50D} Investigation"],["action","\u{1F680} Taking Action"]].map(([p, label]) => (
                 <button key={p} onClick={() => { setPage(p); setActive(null); }}
                   style={{ padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all 0.15s", background: page === p ? "white" : "transparent", color: page === p ? "#111827" : "rgba(255,255,255,0.6)", borderColor: page === p ? "white" : "rgba(255,255,255,0.2)" }}>
                   {label}
@@ -979,6 +1129,19 @@ function App() {
               {page === "plan" && (
                 <span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
                   Project end {PROJECT_END} · {Object.keys(reflections).length} reflection{Object.keys(reflections).length !== 1 ? "s" : ""}
+                </span>
+              )}
+              {page === "investigation" && (() => {
+                const cnt = evidence.length;
+                const grade = cnt >= 7 ? "Excellence" : cnt >= 5 ? "Merit" : cnt >= 3 ? "Achieved" : "Not Achieved";
+                const color = cnt >= 7 ? "#86efac" : cnt >= 5 ? "#93c5fd" : cnt >= 3 ? "#fcd34d" : "#fca5a5";
+                return (<span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
+                  {cnt} evidence piece{cnt !== 1 ? "s" : ""} · <span style={{ color, fontWeight: 700 }}>{grade}</span>
+                </span>);
+              })()}
+              {page === "action" && (
+                <span style={{ marginLeft: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", alignSelf: "center" }}>
+                  Phase 2 of 3 — graded later this term
                 </span>
               )}
             </div>
@@ -1075,6 +1238,143 @@ function App() {
             )}
           </div>
         )}
+        {/* INVESTIGATION BUCKET PAGE */}
+        {page === "investigation" && (() => {
+          const cnt = evidence.length;
+          const fillPct = Math.min(100, (cnt / 8) * 100);
+          const overflowing = cnt > 8;
+          const grade = cnt >= 7 ? "excellence" : cnt >= 5 ? "merit" : cnt >= 3 ? "achieved" : "na";
+          const gradeName = { na: "Not Achieved", achieved: "Achieved", merit: "Merit", excellence: "Excellence" }[grade];
+          const gradeDesc = {
+            na: "0–2 pieces of evidence. The bucket is nearly empty — log more interviews, articles, videos, or AI-collaboration insights.",
+            achieved: "3–4 pieces. The bucket is filling up. Keep adding from a wider variety of methods.",
+            merit: "5–6 pieces. Strong evidence base across multiple methods. One or two more pushes to Excellence.",
+            excellence: "7+ pieces. The bucket is full or overflowing. Diverse methods documented; ready for assessment."
+          }[grade];
+          const waterColor = grade === "excellence" ? "#22c55e" : grade === "merit" ? "#3b82f6" : grade === "achieved" ? "#f59e0b" : "#ef4444";
+          const waterY = 280 - (240 * fillPct / 100); // SVG y-coord, lower = more water
+          const CATEGORIES = [
+            { id: "interview", label: "Expert interviews", icon: "\u{1F465}", desc: "Conversations with stakeholders, with notes or audio." },
+            { id: "article", label: "Articles & papers (analysed)", icon: "\u{1F4D6}", desc: "What you personally read and analysed — not AI-added." },
+            { id: "video", label: "Videos (analysed)", icon: "\u{1F3A5}", desc: "YouTube / docs / news clips with your notes." },
+            { id: "ai", label: "AI collaboration insights", icon: "\u{1F916}", desc: "Significant exchanges, surprises, or pivots from working with Claude." },
+            { id: "field", label: "Field expeditions / site visits", icon: "\u{1F3D4}\uFE0F", desc: "Physical reconnaissance, SAR exercises, alpine site visits." },
+            { id: "draft", label: "Self-authored drafts", icon: "\u270D\uFE0F", desc: "Independent writing or sketches you produced yourself." },
+            { id: "pivot", label: "Question pivots", icon: "\u{1F500}", desc: "Documented changes in your research questions." },
+            { id: "other", label: "Other", icon: "\u2728", desc: "Anything else that demonstrates investigation." }
+          ];
+          return (
+            <div className="iv-wrap">
+              <div style={{ marginBottom: 18, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+                <div>
+                  <h2 style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>Investigation Bucket</h2>
+                  <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, maxWidth: 720 }}>Evidence of the research methods, expert interactions, and question pivots that drove this Investigation phase. The bucket fills as you add evidence; deadline May 6.</p>
+                </div>
+                <button className="btn btn-primary" onClick={() => setEditingEvidence({ category: "interview", title: "", date: new Date().toISOString().slice(0, 10), source: "", notes: "", link: "" })}>+ Add evidence</button>
+              </div>
+              {/* Bucket animation + grade banner */}
+              <div className="bucket-stage">
+                <div>
+                  <svg className="bucket-svg" viewBox="0 0 280 320" xmlns="http://www.w3.org/2000/svg">
+                    {/* Bucket outer */}
+                    <defs>
+                      <clipPath id="bucketClip"><path d="M50,40 L80,280 L200,280 L230,40 Z" /></clipPath>
+                    </defs>
+                    {/* Water (clipped to bucket shape) */}
+                    <g clipPath="url(#bucketClip)">
+                      <rect className="bucket-water" x="40" y={waterY} width="240" height="260" fill={waterColor} opacity="0.85" />
+                      {/* Wave overlay */}
+                      <path className="bucket-wave" d={`M40,${waterY} Q90,${waterY-8} 140,${waterY} T240,${waterY} L260,${waterY+10} L40,${waterY+10} Z`} fill={waterColor} opacity="0.55" />
+                    </g>
+                    {/* Glass outline */}
+                    <path className="bucket-glass" d="M50,40 L80,280 L200,280 L230,40" fill="rgba(255,255,255,0.5)" />
+                    <line className="bucket-glass" x1="40" y1="40" x2="240" y2="40" />
+                    {/* Overflow droplets */}
+                    {overflowing && (<>
+                      <circle className="bucket-droplet" cx="70" cy="40" r="4" fill={waterColor} />
+                      <circle className="bucket-droplet" cx="120" cy="40" r="3" fill={waterColor} />
+                      <circle className="bucket-droplet" cx="180" cy="40" r="3" fill={waterColor} />
+                      <circle className="bucket-droplet" cx="220" cy="40" r="4" fill={waterColor} />
+                    </>)}
+                    {/* Count label */}
+                    <text x="140" y="180" textAnchor="middle" fontSize="60" fontWeight="800" fill="white" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}>{cnt}</text>
+                    <text x="140" y="208" textAnchor="middle" fontSize="14" fontWeight="700" fill="white" opacity="0.9">pieces</text>
+                  </svg>
+                </div>
+                <div className={"grade-banner grade-" + (grade === "na" ? "na" : grade === "achieved" ? "ach" : grade === "merit" ? "merit" : "exc")}>
+                  <span className="grade-label">Current grade</span>
+                  <span className="grade-name">{gradeName}</span>
+                  <p className="grade-desc">{gradeDesc}</p>
+                  <div className="grade-scale">
+                    {[1,2,3,4,5,6,7,8].map(i => (<div key={i} className={"grade-scale-pip" + (i <= cnt ? " filled" : "")} />))}
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, fontWeight: 700, marginTop: 6, opacity: 0.7 }}>
+                    <span>0</span><span>NA</span><span>ACH</span><span>MERIT</span><span>EXC</span><span>{cnt > 8 ? "OVERFLOW \u{1F4A6}" : "8"}</span>
+                  </div>
+                </div>
+              </div>
+              {/* Original 5 inquiry buckets */}
+              <h3 style={{ fontSize: 14, fontWeight: 800, color: "#374151", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Original 5 inquiry buckets</h3>
+              <p style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>The five buckets that framed this Investigation. Click any one to see how it has evolved into the current 15-section proposal.</p>
+              <div className="oq-grid">
+                {ORIGINAL_QUESTIONS.map(oq => (
+                  <div key={oq.id} className="oq-card" style={{ borderTopColor: oq.color }} onClick={() => setOpenOQ(oq)}>
+                    <div className="oq-card-topic">{oq.topic}</div>
+                    <div className="oq-card-sub">{oq.subtitle}</div>
+                    <p className="oq-card-rq">{oq.research_question}</p>
+                    <div className="oq-evolved">→ Evolved into §{oq.evolved_into.join(", §")}</div>
+                  </div>
+                ))}
+              </div>
+              {/* Evidence by category */}
+              <h3 style={{ fontSize: 14, fontWeight: 800, color: "#374151", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10, marginTop: 22 }}>Evidence collected</h3>
+              {CATEGORIES.map(cat => {
+                const items = evidence.filter(e => e.category === cat.id);
+                return (
+                  <div key={cat.id} className="ev-cat">
+                    <div className="ev-cat-head">
+                      <div>
+                        <span className="ev-cat-title">{cat.icon} {cat.label}</span>
+                        <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>{cat.desc}</div>
+                      </div>
+                      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        <span className="ev-cat-count">{items.length} item{items.length !== 1 ? "s" : ""}</span>
+                        <button className="tpl-btn" onClick={() => setEditingEvidence({ category: cat.id, title: "", date: new Date().toISOString().slice(0, 10), source: "", notes: "", link: "" })}>+ Add</button>
+                      </div>
+                    </div>
+                    {items.length > 0 ? (
+                      <div className="ev-list">
+                        {[...items].sort((a,b) => (b.date||"").localeCompare(a.date||"")).map(e => (
+                          <div key={e.id} className="ev-item" onClick={() => setEditingEvidence(e)}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div className="ev-item-title">{e.title || "(untitled)"}</div>
+                              <div className="ev-item-meta">{e.date}{e.source ? " · " + e.source : ""}{e.notes ? " · " + e.notes.slice(0, 80) + (e.notes.length > 80 ? "…" : "") : ""}</div>
+                            </div>
+                            {e.link && (<a href={e.link} target="_blank" rel="noopener" onClick={ev => ev.stopPropagation()} style={{ fontSize: 12, color: "#4338ca", textDecoration: "none" }}>open ↗</a>)}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (<div style={{ fontSize: 11, color: "#9ca3af", fontStyle: "italic", padding: "6px 0" }}>No evidence in this category yet.</div>)}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
+        {/* TAKING ACTION BUCKET PAGE */}
+        {page === "action" && (
+          <div className="iv-wrap">
+            <div style={{ marginBottom: 18 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: "#111827" }}>Taking Action Bucket</h2>
+              <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, maxWidth: 720 }}>The next phase of the Impact Project — graded later this term. This is where deliverables, prototype iterations, stakeholder engagement outcomes, and tangible action will be evidenced.</p>
+            </div>
+            <div style={{ background: "linear-gradient(135deg, #f0fdf4 0%, #fefce8 100%)", border: "1px solid #bbf7d0", borderRadius: 14, padding: "32px 28px", textAlign: "center" }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>\u{1F680}</div>
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: "#14532d" }}>Coming next phase</h3>
+              <p style={{ fontSize: 13, color: "#166534", marginTop: 8, maxWidth: 540, margin: "8px auto 0" }}>Once the Investigation is graded (target May 6), this bucket will mirror the Investigation page's structure with action-oriented categories: Pilot operations, Prototype iterations, Funding outreach, Public engagement, Sharation deliverables, Implementation milestones.</p>
+            </div>
+          </div>
+        )}
         {/* ACTION PLAN PAGE — Trello-style board */}
         {page === "plan" && (() => {
           const obj = getTodaysObjective(today);
@@ -1089,6 +1389,7 @@ function App() {
             if (di.hours > 0 || ds === today) upcoming.push(ds);
           }
           const trackerSuggestionsForDay = (date) => {
+            // Returns ALL items in scope (done + not-done) so ticking doesn't make items disappear
             const phase = getCurrentPhase(date);
             if (!phase) return [];
             const sids = PHASE_SCOPE[phase.id] || [];
@@ -1098,11 +1399,12 @@ function App() {
               if (!sec) continue;
               for (const it of sec.items) {
                 const k = sid + "__" + it.text;
-                if (!checked[k]) out.push({ key: k, sid, item: it, section: sec });
+                out.push({ key: k, sid, item: it, section: sec });
               }
             }
             return out;
           };
+          const ITEMS_PER_DAY = 4;
           return (
             <div className="plan-wrap">
               <div className="objective-card">
@@ -1122,13 +1424,23 @@ function App() {
                 <span style={{ fontSize: 11, color: "#6b7280" }}>{upcoming.length} working day{upcoming.length !== 1 ? "s" : ""} · click cards to tick · "Reflect" opens day modal</span>
               </div>
               <div className="trello-board">
-                {upcoming.map(d => {
+                {upcoming.map((d, dayIdx) => {
                   const info = getDayInfo(d);
                   const phase = getCurrentPhase(d);
                   const dt = new Date(d + "T00:00:00");
                   const isToday = d === today;
                   const dayTasks = tasks[d] || [];
-                  const trackerSugg = trackerSuggestionsForDay(d).slice(0, 6);
+                  // Distribute items deterministically per day so each column has a unique slice
+                  const allItems = trackerSuggestionsForDay(d);
+                  const trackerSugg = [];
+                  if (allItems.length > 0) {
+                    const startIdx = (dayIdx * ITEMS_PER_DAY) % allItems.length;
+                    for (let i = 0; i < Math.min(ITEMS_PER_DAY, allItems.length); i++) {
+                      trackerSugg.push(allItems[(startIdx + i) % allItems.length]);
+                    }
+                  }
+                  const doneCount = trackerSugg.filter(s => checked[s.key]).length + dayTasks.filter(t => t.done).length;
+                  const totalCount = trackerSugg.length + dayTasks.length;
                   const cls = "trello-col" + (isToday ? " col-today" : "") + (info.isPowerWeek ? " col-power" : "");
                   return (
                     <div key={d} className={cls}>
@@ -1139,6 +1451,7 @@ function App() {
                           <span className="col-pill">{info.hours}h</span>
                           {info.isPowerWeek && <span className="col-pill pill-power">⚡ Power</span>}
                           {phase && <span className="col-pill">P{phase.id} · {phase.name}</span>}
+                          {totalCount > 0 && <span className="col-pill" style={{ background: doneCount === totalCount ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.12)", color: doneCount === totalCount ? "#15803d" : "#4338ca" }}>{doneCount}/{totalCount}</span>}
                         </div>
                       </div>
                       <div className="col-cards">
@@ -1293,6 +1606,74 @@ function App() {
         </div>}
       </div>
       {/* WORK PANEL */}
+      {openOQ && (
+        <div className="modal-backdrop" onClick={() => setOpenOQ(null)}>
+          <div className="modal" onClick={ev => ev.stopPropagation()}>
+            <div className="modal-head" style={{ borderTopLeftRadius: 14, borderTopRightRadius: 14, borderTop: `5px solid ${openOQ.color}` }}>
+              <div style={{ minWidth: 0 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>{openOQ.topic}</h3>
+                <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>{openOQ.subtitle}</div>
+              </div>
+              <button onClick={() => setOpenOQ(null)} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="field"><span className="field-label">Original research question</span><p style={{ fontSize: 13, color: "#1f2937", lineHeight: 1.6 }}>{openOQ.research_question}</p></div>
+              <div className="field"><span className="field-label">Original inquiry questions</span>{openOQ.inquiry_questions.map((q, i) => (<p key={i} style={{ fontSize: 13, color: "#374151", lineHeight: 1.5, marginTop: 4 }}>• {q}</p>))}</div>
+              <div className="field"><span className="field-label">Original research methods</span>{openOQ.research_methods.map((m, i) => (<p key={i} style={{ fontSize: 13, color: "#374151", lineHeight: 1.5, marginTop: 4 }}>• {m}</p>))}</div>
+              <div className="field" style={{ background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: 10, padding: 12 }}>
+                <span className="field-label" style={{ color: "#4338ca" }}>How this evolved</span>
+                <p style={{ fontSize: 13, color: "#1f2937", lineHeight: 1.6, marginTop: 6 }}>{openOQ.evolution_note}</p>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
+                  {openOQ.evolved_into.map(sid => {
+                    const sec = SECTIONS.find(s => s.id === sid);
+                    return sec ? (<button key={sid} className="tpl-btn" onClick={() => { setPage("tracker"); setOpenOQ(null); }}>§{sid} · {sec.title}</button>) : null;
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="modal-foot">
+              <button className="btn btn-outline" onClick={() => { setEditingEvidence({ category: "pivot", title: openOQ.topic + " — pivot evidence", date: new Date().toISOString().slice(0, 10), source: openOQ.topic, notes: openOQ.evolution_note, link: "" }); setOpenOQ(null); }}>Log this pivot as evidence</button>
+              <button className="btn btn-primary" onClick={() => setOpenOQ(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {editingEvidence && (
+        <div className="modal-backdrop" onClick={() => setEditingEvidence(null)}>
+          <div className="modal" onClick={ev => ev.stopPropagation()}>
+            <div className="modal-head">
+              <h3 style={{ fontSize: 16, fontWeight: 800, color: "#111827" }}>{editingEvidence.id ? "Edit evidence" : "Add evidence"}</h3>
+              <button onClick={() => setEditingEvidence(null)} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="field-grid-2">
+                <div className="field"><label className="field-label">Category</label>
+                  <select className="field-select" value={editingEvidence.category||"interview"} onChange={ev => setEditingEvidence({ ...editingEvidence, category: ev.target.value })}>
+                    <option value="interview">Expert interview</option>
+                    <option value="article">Article / paper (analysed)</option>
+                    <option value="video">Video (analysed)</option>
+                    <option value="ai">AI collaboration insight</option>
+                    <option value="field">Field expedition / site visit</option>
+                    <option value="draft">Self-authored draft</option>
+                    <option value="pivot">Question pivot</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className="field"><label className="field-label">Date</label><input type="date" className="field-input" value={editingEvidence.date||""} onChange={ev => setEditingEvidence({ ...editingEvidence, date: ev.target.value })} /></div>
+              </div>
+              <div className="field"><label className="field-label">Title / what is this evidence?</label><input className="field-input" value={editingEvidence.title||""} onChange={ev => setEditingEvidence({ ...editingEvidence, title: ev.target.value })} placeholder="e.g. Email exchange with Johnny Franklin (LandSAR), 28 April" /></div>
+              <div className="field"><label className="field-label">Source / who or where?</label><input className="field-input" value={editingEvidence.source||""} onChange={ev => setEditingEvidence({ ...editingEvidence, source: ev.target.value })} placeholder="e.g. Johnny Franklin · NZ LandSAR" /></div>
+              <div className="field"><label className="field-label">Notes — what did you learn? what changed?</label><textarea className="field-textarea" rows={5} value={editingEvidence.notes||""} onChange={ev => setEditingEvidence({ ...editingEvidence, notes: ev.target.value })} placeholder="Key insight, quote, surprise, or pivot triggered by this evidence." /></div>
+              <div className="field"><label className="field-label">Link (optional)</label><input className="field-input" type="url" value={editingEvidence.link||""} onChange={ev => setEditingEvidence({ ...editingEvidence, link: ev.target.value })} placeholder="URL to article, video, doc, email, or attachment" /></div>
+            </div>
+            <div className="modal-foot">
+              {editingEvidence.id && (<button className="btn btn-outline" style={{ marginRight: "auto", color: "#dc2626", borderColor: "#fecaca" }} onClick={async () => { if (confirm("Delete this evidence?")) { await deleteEvidenceById(editingEvidence.id); setEditingEvidence(null); } }}>Delete</button>)}
+              <button className="btn btn-outline" onClick={() => setEditingEvidence(null)}>Cancel</button>
+              <button className="btn btn-primary" onClick={async () => { await saveEvidence(editingEvidence); setEditingEvidence(null); }}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
       {editingCriterion && (
         <div className="modal-backdrop" onClick={() => setEditingCriterion(null)}>
           <div className="modal" onClick={ev => ev.stopPropagation()}>
