@@ -190,6 +190,41 @@
     .ev-item:hover { border-color: #818cf8; }
     .ev-item-title { font-size: 13px; font-weight: 600; color: #1f2937; }
     .ev-item-meta { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    /* Carrot Cake Success Criteria */
+    .cake-wrap { padding: 24px 20px 60px; max-width: 1100px; margin: 0 auto; background: linear-gradient(180deg, #fef9e7 0%, #faf2dc 100%); border-radius: 18px; }
+    .cake-stage { display: grid; grid-template-columns: 80px 1fr 80px; gap: 16px; align-items: start; margin-top: 16px; }
+    @media (max-width: 700px) { .cake-stage { grid-template-columns: 1fr; } .cake-side-l, .cake-side-r { display: none; } }
+    .cake-side-l, .cake-side-r { padding-top: 80px; opacity: 0.85; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+    .cake-stack { display: flex; flex-direction: column; }
+    .cake-frosting { background: linear-gradient(180deg, #fffbe7 0%, #fbf3d4 50%, #f5e8b8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; padding: 18px 24px; position: relative; box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), inset 0 -2px 4px rgba(0,0,0,0.04); }
+    .cake-top { border-radius: 36% 36% 8px 8px / 60px 60px 8px 8px; border-top: none; padding-top: 32px; padding-bottom: 24px; }
+    .cake-top::before { content: ""; position: absolute; top: -10px; left: 8%; right: 8%; height: 22px; background: linear-gradient(180deg, #fffbe7 0%, #fbf3d4 100%); border-radius: 80% 70% 60% 90% / 100% 100% 0 0; box-shadow: inset 0 -2px 3px rgba(0,0,0,0.04); }
+    .cake-top::after { content: "\u{1F95C}\u2003\u{1F955}\u2003\u{1F95C}"; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); font-size: 28px; }
+    .cake-bottom { border-radius: 8px 8px 18px 18px; border-bottom: 4px solid #d4a574; padding-bottom: 22px; }
+    .cake-frosting-thin { height: 14px; background: linear-gradient(180deg, #fdf6d8 0%, #f5e8b8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; margin: -1px 0; box-shadow: inset 0 2px 3px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.05); position: relative; }
+    .cake-goal-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #b8860b; }
+    .cake-goal-text { font-size: 16px; font-weight: 800; color: #5d3a0d; line-height: 1.3; margin-top: 4px; max-width: 720px; }
+    .cake-goal-sub { font-size: 12px; color: #7c5a2a; margin-top: 6px; line-height: 1.5; max-width: 720px; }
+    .cake-layer { position: relative; cursor: pointer; transition: all 0.25s; overflow: hidden; }
+    .cake-layer-bar { display: flex; align-items: center; gap: 12px; padding: 18px 24px; color: #fff7ec; position: relative; z-index: 2; }
+    .cake-layer-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.4); font-size: 13px; font-weight: 800; flex-shrink: 0; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .cake-layer-title { flex: 1; font-size: 15px; font-weight: 800; line-height: 1.3; text-shadow: 0 1px 2px rgba(0,0,0,0.25); min-width: 0; }
+    .cake-layer-meta { font-size: 11px; opacity: 0.85; white-space: nowrap; }
+    .cake-layer-arrow { font-size: 14px; opacity: 0.85; }
+    .cake-layer-bg { position: absolute; inset: 0; z-index: 1; background-image: radial-gradient(circle at 8% 22%, #6d4423 2.5px, transparent 3.5px), radial-gradient(circle at 22% 65%, #f5a05f 3px, transparent 4px), radial-gradient(circle at 38% 30%, #8b6347 2px, transparent 3px), radial-gradient(circle at 52% 70%, #6d4423 2.5px, transparent 3.5px), radial-gradient(circle at 68% 35%, #f5a05f 2px, transparent 3px), radial-gradient(circle at 82% 60%, #8b6347 2.5px, transparent 3.5px), radial-gradient(circle at 92% 25%, #f5a05f 2.5px, transparent 3.5px); pointer-events: none; opacity: 0.65; }
+    .cake-layer:hover .cake-layer-bg { opacity: 0.8; }
+    .cake-layer:hover { filter: brightness(1.05); }
+    .cake-layer-detail { background: linear-gradient(180deg, #fffbed 0%, #fcf3d8 100%); border-left: 3px solid #e8d394; border-right: 3px solid #e8d394; padding: 18px 24px; }
+    .cake-layer-subtitle { font-size: 12px; color: #7c5a2a; margin-bottom: 12px; font-style: italic; }
+    .cake-test { background: white; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid #e8d394; box-shadow: 0 2px 4px rgba(166, 112, 63, 0.06); cursor: pointer; transition: all 0.2s; }
+    .cake-test:hover { border-color: #c08552; box-shadow: 0 4px 10px rgba(166, 112, 63, 0.12); transform: translateX(3px); }
+    .cake-test-name { font-size: 14px; font-weight: 800; color: #5d3a0d; }
+    .cake-test-desc { font-size: 12px; color: #4b5563; line-height: 1.5; margin-top: 6px; }
+    .cake-test-criteria { display: none; margin-top: 10px; }
+    .cake-test.expanded .cake-test-criteria { display: block; }
+    .cake-test-toggle { display: inline-block; font-size: 11px; font-weight: 700; color: #b8860b; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .cake-side-svg { width: 60px; height: auto; }
+    .cake-walnut { width: 30px; height: 30px; margin: 4px; }
   </style>
 </head>
 <body>
@@ -319,6 +354,196 @@ const ORIGINAL_QUESTIONS = [
     ],
     evolved_into: [3, 4, 5, 15],
     evolution_note: "Expanded into solution overview (§3), technical validation (§4), international precedents that proved feasibility (§5), and a comprehensive technical appendix (§15). \u201CMicro-aid delivery\u201D specifically also broadened to include detection \u2014 finding subjects fast, not just delivering supplies."
+  }
+];
+
+// ---- Cake layers: reimagined success criteria ----
+// Each layer is a SPECIFIC outcome (not a generic topic). Testing methods are diverse and concrete.
+const CAKE_LAYERS = [
+  {
+    id: "safe",
+    title: "Operates safely for subjects, rescuers, and environment",
+    short: "Operates safely",
+    sponge: "#c08552", // top of layer
+    sponge_dark: "#a6703f", // bottom of layer
+    tests: [
+      {
+        name: "Risk assessment matrix",
+        description: "Build a hazard \u00d7 likelihood \u00d7 impact \u00d7 mitigation grid covering every foreseeable failure mode \u2014 drone loss, signal failure, mid-air conflict with helicopters, payload mis-drop, weather grounding mid-mission, operator error, lithium battery fire, public injury during recovery.",
+        achieved: "Matrix covers \u22658 distinct hazards with named mitigations and a residual-risk rating for each.",
+        merit: "Matrix reviewed by Liam Riles (Wanaka SAR, Part 102) and revised based on feedback. Top 3 high-residual-risk items have written contingency plans.",
+        excellence: "Matrix follows JARUS SORA methodology, peer-reviewed by a CAA Part 102 holder, and incorporates a documented incident-response runbook signed off by NZ Police SAR liaison."
+      },
+      {
+        name: "SAR-expert validation interview",
+        description: "Sit down with a current operational SAR drone pilot (Liam Riles in Wanaka, or Fiordland team) and walk through the proposed system end-to-end. Ask explicitly: \u201Cwhat would go wrong here that I haven\u2019t thought of?\u201D",
+        achieved: "Two interviews completed, notes documented, top-five concerns logged into the risk matrix.",
+        merit: "Three or more interviews across different SAR organisations (LandSAR + helicopter operator + Police SAR). Concerns triangulated.",
+        excellence: "Independent SAR-safety practitioner provides a written sign-off that the proposal is safe-to-pilot in NZ alpine conditions, conditional on listed mitigations."
+      },
+      {
+        name: "Controlled alpine field trial",
+        description: "Run a small, instrumented test flight in a real alpine setting (Wakatipu basin or Mt Aspiring foothills), with a Part-102 partner. Measure: detection success, pilot workload, weather-window compliance, communication with ground team.",
+        achieved: "One trial completed under Part 101 day-VFR conditions with documented observations.",
+        merit: "Three trials across different terrain types (open scree, dense bush, valley floor) with comparative data.",
+        excellence: "Trials co-designed with Wanaka SAR, including a simulated injured-subject scenario, with subject-condition outcome data and a written incident-free safety record."
+      },
+      {
+        name: "Privacy & liability legal review",
+        description: "Identify how subject imagery is collected, stored, accessed, retained, and destroyed. Identify who carries liability if drone failure contributes to harm.",
+        achieved: "Privacy and liability sections drafted into the proposal (\u00a76 Regulatory) referencing NZ Privacy Act 2020 and standard Police SAR liability framework.",
+        merit: "Reviewed by a school legal adviser or pro-bono lawyer; suggested wording incorporated.",
+        excellence: "Independent legal opinion (one page) appended to the proposal, attesting that the proposed data-handling and liability framework are NZ-compliant."
+      }
+    ]
+  },
+  {
+    id: "regulatory",
+    title: "Compliant with NZ CAA Part 101/102 and Police UAV policy",
+    short: "Compliant with NZ CAA + Police UAV policy",
+    sponge: "#bb7a4e",
+    sponge_dark: "#965f3a",
+    tests: [
+      {
+        name: "Meet with NZSAR Secretariat",
+        description: "Open the door at the apex of NZ SAR governance. The Secretariat sits inside the Ministry of Transport and chairs the NZSAR Council (Police, NZDF, Maritime NZ, CAA, FENZ, DOC). Ask: \u201Cwhat is the appropriate engagement order, and what do we need to evidence?\u201D",
+        achieved: "Outreach email sent and reply received. Initial 30-minute call scheduled or completed.",
+        merit: "Two follow-up engagements; written confirmation of the introduction route into Police SAR and CAA.",
+        excellence: "Secretariat formally endorses the proposal\u2019s engagement plan and writes a warm introduction to NZ Police SAR command."
+      },
+      {
+        name: "Wanaka SAR Part 102 case study",
+        description: "Wanaka and Fiordland are two of very few volunteer-organisation Part 102 holders in NZ. Interview Liam Riles to understand exactly what the certification cost in time, money, paperwork, and ongoing maintenance.",
+        achieved: "Interview completed and Part 102 timeline + cost facts captured into the proposal\u2019s Regulatory Pathway (\u00a76).",
+        merit: "Wanaka shares (with permission) their actual exposition document or summary so the NZ proposal can model on a real, approved case.",
+        excellence: "Wanaka SAR offers a written letter of support attesting that the proposed Part 102 pathway is realistic for the Queenstown context."
+      },
+      {
+        name: "Police UAV policy + district-discretion review",
+        description: "National Police HQ requires Part 102 + registered provider, but district commanders and incident controllers retain delegated authority to task whatever asset is available in an emergency. Map exactly where the proposed system falls.",
+        achieved: "Policy summary written into the proposal showing both the strict national rule and the operational district-discretion reality.",
+        merit: "Confirmed in writing by a Police SAR liaison that the proposal is consistent with both layers.",
+        excellence: "Proposal includes a documented working framework that lets a district incident controller deploy the drone in an emergency without violating policy."
+      },
+      {
+        name: "CAA Part 101 \u2192 102 pathway scoping",
+        description: "Define exactly which operations can be done under Part 101 (training, demos, day-VFR LOS) while Part 102 is in progress, and what specifically requires Part 102 (BVLOS, night, alpine, urban, sub-25-kg + payload).",
+        achieved: "Pathway diagram drawn into \u00a76 with named milestones for the next 12 months.",
+        merit: "Pre-application meeting with the CAA Unmanned Aircraft Unit completed and feedback incorporated.",
+        excellence: "CAA case officer confirms in writing that the pathway is credible, with named decision points and timelines for a real Part 102 application."
+      }
+    ]
+  },
+  {
+    id: "stakeholder",
+    title: "Endorsed by LandSAR, Police, and the Queenstown community",
+    short: "Endorsed by LandSAR, Police, Queenstown community",
+    sponge: "#a16e3f",
+    sponge_dark: "#82542d",
+    tests: [
+      {
+        name: "Queenstown community survey",
+        description: "Survey residents, DOC track users, outdoor-recreation operators, and visiting trampers in the Wakatipu basin. Ask: do you support drone-assisted SAR? What concerns? What outcomes would you measure?",
+        achieved: "Minimum 30 survey responses collected, results summarised and included in \u00a78.",
+        merit: "100+ responses across at least four respondent categories; thematic analysis written up.",
+        excellence: "Survey results presented at a community meeting (QLDC or DOC) with public Q&A and follow-up engagement plan."
+      },
+      {
+        name: "Letters of support outreach",
+        description: "Approach LandSAR (CE Carl McOnie), QLDC, DOC, and one Mt Aspiring climbing guide service for written or email expressions of interest in the proposal.",
+        achieved: "One written or emailed expression of interest secured.",
+        merit: "Three expressions of interest from different organisation types.",
+        excellence: "Five or more, including at least one formal letter on official letterhead from a Council, government agency, or national SAR organisation."
+      },
+      {
+        name: "Stakeholder mapping by influence \u00d7 interest",
+        description: "Build a 2\u00d72 stakeholder grid: who has high influence vs interest in the project, and what does each need from the proposal? Update it as the proposal evolves.",
+        achieved: "Grid drawn with \u22658 stakeholders categorised; engagement strategy aligned to grid quadrants.",
+        merit: "Grid validated with NZSAR Secretariat or LandSAR senior staff.",
+        excellence: "Grid is appended to the proposal as Appendix B and is referenced explicitly in \u00a78 and \u00a713."
+      },
+      {
+        name: "Mt Aspiring / Wakatipu user focus group",
+        description: "Convene 5\u20138 climbers, trampers, and adventure-tourism guides for a 90-minute structured discussion: where would drones help, what worries you, what shouldn\u2019t change?",
+        achieved: "One focus group held; notes documented; key themes added to the proposal.",
+        merit: "Focus group held in person, recorded with consent, and a one-page summary signed off by participants.",
+        excellence: "Focus group co-hosted with a mountain-safety organisation (Mountain Safety Council, NZAC, or similar), with participants drawn from across the South Island."
+      }
+    ]
+  },
+  {
+    id: "viable",
+    title: "Financially viable for Queenstown deployment ($50k\u2013$120k pilot envelope)",
+    short: "Financially viable",
+    sponge: "#a87749",
+    sponge_dark: "#86552f",
+    tests: [
+      {
+        name: "Cost-benefit analysis vs helicopter-only",
+        description: "Build a Queenstown-specific model comparing per-mission cost of helicopter SAR (NZD $7k\u2013$11k) against drone deployment (~$200\u2013$500), and total programme cost over three years.",
+        achieved: "Model drafted in a spreadsheet with named assumptions; included in \u00a77 of the proposal.",
+        merit: "Model reviewed by a Queenstown-area accountant or financial mentor; sensitivity analysis added.",
+        excellence: "Model audited by Treasury, NZSAR Secretariat, or an equivalent independent reviewer; numbers cited in proposal are attestable."
+      },
+      {
+        name: "Vendor quotes for the proposed platform",
+        description: "Get real, current NZ-pricing quotes for the recommended setup: DJI Matrice 350 RTK + Zenmuse H30T payload + spare battery sets + ground station + transport cases. Compare with one alternative platform.",
+        achieved: "Two written quotes obtained from NZ-based DJI resellers.",
+        merit: "Three quotes including one fixed-wing alternative (e.g. Quantum Trinity) for long-corridor BVLOS work.",
+        excellence: "Vendor commits in writing to a pricing window valid for at least six months, conditional on the proposal proceeding."
+      },
+      {
+        name: "Wanaka SAR funding-model interview",
+        description: "Wanaka and Fiordland funded their Part 102 + equipment from local fundraising. Understand exactly which donors, what amounts, what time horizons, and what they would do differently.",
+        achieved: "Interview completed and a one-page funding-model summary written.",
+        merit: "Interview cross-checked with a second NZ volunteer SAR organisation and synthesised into a funding playbook.",
+        excellence: "Playbook adopted into the proposal\u2019s \u00a714 The Ask, including named potential donors and matched funding pathways."
+      },
+      {
+        name: "Funding pathway proposals (govt, private, public-private)",
+        description: "Identify and contact at least three plausible funding pathways: a government grant (Lottery Significant Projects Fund, Provincial Growth Fund), a private donor or corporate sponsor (Westpac, regional trusts), and a public-private partnership candidate (helicopter operator, drone vendor).",
+        achieved: "Three named pathways identified with contact details and required application formats.",
+        merit: "First-stage outreach completed for all three; at least one positive reply secured.",
+        excellence: "One funding pathway has formally invited a full application; a second has expressed informal commitment of co-funding."
+      }
+    ]
+  },
+  {
+    id: "tech",
+    title: "Technically proven for alpine SAR (\u226580% POD with structured workflow)",
+    short: "Technically proven for alpine SAR",
+    sponge: "#9a6638",
+    sponge_dark: "#7a4f29",
+    tests: [
+      {
+        name: "Joint POD trial with Wanaka SAR",
+        description: "Replicate LandSAR\u2019s methodology: pre-programmed grid flight, vertical RGB stills with 60\u201370% overlap, post-flight analysis. Measure POD across three terrain types (open scree, dense bush, riverine).",
+        achieved: "One full trial completed with documented POD numbers per terrain type.",
+        merit: "Three trials across different terrain conditions and lighting; numbers within \u00b110% of LandSAR\u2019s baseline.",
+        excellence: "Six or more trials replicated independently with statistically valid sample sizes; results submitted for peer review or published as a public technical note."
+      },
+      {
+        name: "University of Canterbury collaboration",
+        description: "Contact the UC team that built LandSAR\u2019s search-pattern planner and colour-anomaly detector. Trial these tools in a Queenstown context and feed back results.",
+        achieved: "Initial contact made and access to one of the two tools secured for trial use.",
+        merit: "Both tools trialled, with comparative POD results vs unaided analyst review.",
+        excellence: "Joint write-up co-authored with a UC researcher, demonstrating measurable detection improvement and recommending refinements."
+      },
+      {
+        name: "Bluetooth / sound-line / payload prototype",
+        description: "Build or specify a small prototype payload demonstrating one of the three high-potential drone use cases beyond camera search: Bluetooth detection of stranded subject\u2019s devices, drone-mounted sound-response (whistle and listen), or stretcher delivery to a no-fly site.",
+        achieved: "One prototype concept fully specified with parts list, control flow, and expected detection range.",
+        merit: "Prototype built and tested in a controlled environment; performance data captured.",
+        excellence: "Prototype demonstrated live to LandSAR or Police SAR with positive reception and a request for further development."
+      },
+      {
+        name: "Comparison with helicopter detection rates",
+        description: "Compare the drone POD numbers obtained against published helicopter SAR detection benchmarks (where available). Be transparent: drones win in some envelopes, lose in others.",
+        achieved: "Comparison table drafted into \u00a74 with citations.",
+        merit: "Comparison validated against at least one operational helicopter SAR pilot or aviation safety officer.",
+        excellence: "Comparison includes a published, peer-reviewed citation for both sides and is referenced in the proposal\u2019s Executive Summary as a headline argument."
+      }
+    ]
   }
 ];
 
@@ -756,6 +981,8 @@ function App() {
   const [evidence, setEvidence] = useState([]);
   const [editingEvidence, setEditingEvidence] = useState(null);
   const [openOQ, setOpenOQ] = useState(null);
+  const [openLayer, setOpenLayer] = useState(null);
+  const [openTest, setOpenTest] = useState(null);
   const [today, setToday] = useState(() => new Date().toISOString().slice(0, 10));
   const [openDay, setOpenDay] = useState(null);
   const [recording, setRecording] = useState(false);
@@ -1203,39 +1430,87 @@ function App() {
             </div>
           </div>
         )}
-        {/* SUCCESS CRITERIA PAGE */}
+        {/* SUCCESS CRITERIA PAGE — Carrot Cake Model */}
         {page === "success" && (
-          <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 20px 60px" }}>
-            <div style={{ marginBottom: 18, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
-              <div>
-                <h2 style={{ fontSize: 18, fontWeight: 800, color: "#111827" }}>Success Criteria</h2>
-                <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, maxWidth: 720 }}>SMART criteria for the Reach Before Rescue Impact Project. Each criterion has three levels — Achieved (the bar), Merit (above the bar), and Excellence (exceptional). All measurable through quantitative or qualitative analysis.</p>
-              </div>
-              <button className="btn btn-primary" onClick={() => setEditingCriterion({ title: "", measurement: "", category: "", achieved: "", merit: "", excellence: "", evidence: "" })}>+ Add criterion</button>
+          <div className="cake-wrap">
+            <div style={{ marginBottom: 14 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#5d3a0d" }}>🥕 The Cake Model — Success Criteria, Reimagined</h2>
+              <p style={{ fontSize: 13, color: "#7c5a2a", marginTop: 6, maxWidth: 800, lineHeight: 1.6 }}>Each layer of the carrot cake is a specific, outcome-named pillar of the project. Click any layer to see four diverse testing methods. Click any test to see Achieved / Merit / Excellence criteria. The frosting at top and bottom is the goal — every layer must hold the cake up.</p>
             </div>
-            {criteria.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "60px 20px", background: "white", border: "1px dashed #e5e7eb", borderRadius: 14, color: "#6b7280" }}>
-                <div style={{ fontSize: 30, marginBottom: 8 }}>🎯</div>
-                <p style={{ fontSize: 14, fontWeight: 600 }}>No criteria yet</p>
-                <p style={{ fontSize: 12, marginTop: 6 }}>Pre-seeded criteria will appear shortly. You can also add custom ones.</p>
+            <div className="cake-stage">
+              <div className="cake-side-l">
+                <svg className="cake-side-svg" viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="30" cy="78" rx="14" ry="22" fill="#ee7d3a" />
+                  <ellipse cx="30" cy="78" rx="11" ry="19" fill="#f48b4a" />
+                  <path d="M30,55 L25,40 L20,30 M30,55 L30,38 L26,28 M30,55 L36,40 L40,32" stroke="#3f7028" strokeWidth="3" strokeLinecap="round" fill="none" />
+                </svg>
+                <svg className="cake-walnut" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="15" cy="15" rx="12" ry="10" fill="#8b5a2b" />
+                  <path d="M15,5 L15,25 M5,15 L25,15 M8,8 Q15,12 22,8 M8,22 Q15,18 22,22" stroke="#5d3a1a" strokeWidth="1" fill="none" />
+                </svg>
               </div>
-            ) : (
-              [...criteria].sort((a,b) => (a.title||"").localeCompare(b.title||"")).map(cr => (
-                <div key={cr.id} className="crit-card">
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div className="crit-title">{cr.title}</div>
-                      <div className="crit-meta">{cr.category}{cr.measurement && (" · " + cr.measurement)}</div>
-                    </div>
-                    <button className="tpl-btn" onClick={() => setEditingCriterion({ ...cr })}>Edit</button>
-                  </div>
-                  <div className="level-row lvl-achieved"><div className="level-label lvl-achieved">Achieved</div><div className="level-text">{cr.achieved}</div></div>
-                  <div className="level-row lvl-merit"><div className="level-label lvl-merit">Merit</div><div className="level-text">{cr.merit}</div></div>
-                  <div className="level-row lvl-excellence"><div className="level-label lvl-excellence">Excellence</div><div className="level-text">{cr.excellence}</div></div>
-                  {cr.evidence && (<div style={{ marginTop: 10, fontSize: 12, color: "#6b7280" }}><strong style={{ color: "#374151" }}>Evidence to gather:</strong> {cr.evidence}</div>)}
+              <div className="cake-stack">
+                <div className="cake-frosting cake-top">
+                  <div className="cake-goal-eyebrow">🎯 The Goal</div>
+                  <div className="cake-goal-text">An actionable, sound, parliament-ready proposal — that secures funding and becomes implemented capability.</div>
+                  <div className="cake-goal-sub">Every layer below must hold this goal up. If a layer fails, the cake collapses.</div>
                 </div>
-              ))
-            )}
+                {CAKE_LAYERS.map((layer, idx) => {
+                  const isOpen = openLayer === layer.id;
+                  return (
+                    <React.Fragment key={layer.id}>
+                      <div className="cake-layer" style={{ background: "linear-gradient(180deg, " + layer.sponge + " 0%, " + layer.sponge_dark + " 100%)" }} onClick={() => { setOpenLayer(isOpen ? null : layer.id); setOpenTest(null); }}>
+                        <div className="cake-layer-bg" />
+                        <div className="cake-layer-bar">
+                          <span className="cake-layer-num">{idx + 1}</span>
+                          <span className="cake-layer-title">{layer.title}</span>
+                          <span className="cake-layer-meta">{layer.tests.length} testing methods</span>
+                          <span className="cake-layer-arrow">{isOpen ? "▲" : "▼"}</span>
+                        </div>
+                      </div>
+                      {isOpen && (
+                        <div className="cake-layer-detail">
+                          <p className="cake-layer-subtitle">Click any testing method to reveal Achieved / Merit / Excellence criteria.</p>
+                          {layer.tests.map((test, ti) => {
+                            const testKey = layer.id + ":" + ti;
+                            const tIsOpen = openTest === testKey;
+                            return (
+                              <div key={ti} className={"cake-test" + (tIsOpen ? " expanded" : "")} onClick={() => setOpenTest(tIsOpen ? null : testKey)}>
+                                <div className="cake-test-name">🔬 {test.name}</div>
+                                <p className="cake-test-desc">{test.description}</p>
+                                <span className="cake-test-toggle">{tIsOpen ? "▲ Hide criteria" : "▼ Show success criteria"}</span>
+                                <div className="cake-test-criteria">
+                                  <div className="level-row lvl-achieved"><div className="level-label lvl-achieved">Achieved</div><div className="level-text">{test.achieved}</div></div>
+                                  <div className="level-row lvl-merit"><div className="level-label lvl-merit">Merit</div><div className="level-text">{test.merit}</div></div>
+                                  <div className="level-row lvl-excellence"><div className="level-label lvl-excellence">Excellence</div><div className="level-text">{test.excellence}</div></div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                      {idx < CAKE_LAYERS.length - 1 && <div className="cake-frosting-thin" />}
+                    </React.Fragment>
+                  );
+                })}
+                <div className="cake-frosting cake-bottom">
+                  <div className="cake-goal-eyebrow">🪩 Foundation</div>
+                  <div className="cake-goal-text">The same goal — anchored. The proposal lands in Parliament; the capability lands in the Wakatipu basin; lives are saved that would otherwise have been lost.</div>
+                </div>
+              </div>
+              <div className="cake-side-r">
+                <svg className="cake-side-svg" viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="30" cy="78" rx="14" ry="22" fill="#ee7d3a" />
+                  <ellipse cx="30" cy="78" rx="11" ry="19" fill="#f48b4a" />
+                  <path d="M30,55 L24,40 L20,32 M30,55 L30,38 L34,28 M30,55 L37,40 L42,30" stroke="#3f7028" strokeWidth="3" strokeLinecap="round" fill="none" />
+                </svg>
+                <svg className="cake-walnut" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="15" cy="15" rx="12" ry="10" fill="#8b5a2b" />
+                  <path d="M15,5 L15,25 M5,15 L25,15 M8,8 Q15,12 22,8 M8,22 Q15,18 22,22" stroke="#5d3a1a" strokeWidth="1" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 24, fontSize: 11, color: "#a07a3a", fontStyle: "italic" }}>The criteria embedded in this cake replace the earlier flat SMART list — they are deliberately specific, action-oriented, and grounded in the methods you can actually run.</div>
           </div>
         )}
         {/* INVESTIGATION BUCKET PAGE */}
