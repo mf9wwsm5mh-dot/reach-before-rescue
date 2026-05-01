@@ -190,86 +190,71 @@
     .ev-item:hover { border-color: #818cf8; }
     .ev-item-title { font-size: 13px; font-weight: 600; color: #1f2937; }
     .ev-item-meta { font-size: 11px; color: #6b7280; margin-top: 2px; }
-    /* Carrot Cake Success Criteria — Cartoon Edition */
-    .cake-wrap { padding: 24px 20px 60px; max-width: 1100px; margin: 0 auto; background: radial-gradient(ellipse at top, #fff8e1 0%, #fce8b6 60%, #f6d68a 100%); border-radius: 22px; position: relative; overflow: hidden; }
-    .cake-wrap::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    /* Carrot Cake Success Criteria — Cartoon Slice Edition */
+    .cake-wrap { padding: 30px 20px 60px; max-width: 1100px; margin: 0 auto; background: linear-gradient(180deg, #faf3e6 0%, #f4ead2 100%); border-radius: 22px; position: relative; overflow: visible; }
+    .cake-stage { display: grid; grid-template-columns: 1fr; gap: 0; align-items: start; margin-top: 8px; position: relative; }
+    .cake-stack { display: flex; flex-direction: column; align-items: stretch; max-width: 720px; margin: 0 auto; position: relative; }
+    .cake-stack::after { content: ""; position: absolute; bottom: -28px; left: 6%; right: 6%; height: 18px; background: radial-gradient(ellipse at center, rgba(99, 60, 24, 0.28) 0%, rgba(99, 60, 24, 0.12) 50%, transparent 80%); filter: blur(4px); z-index: 0; }
+    .cake-carrot-top { position: relative; z-index: 5; display: flex; justify-content: center; margin-bottom: -36px; pointer-events: none; }
+    .cake-carrot-svg { width: 110px; height: 130px; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); animation: carrot-bob 4s ease-in-out infinite; }
+    @keyframes carrot-bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-6px) rotate(3deg); } }
+    .cake-frosting { background: linear-gradient(180deg, #ffffff 0%, #fdf8ef 60%, #f5ecd9 100%); padding: 26px 30px; position: relative; box-shadow: inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(180, 145, 95, 0.08); border-left: 3px solid #ebdcc0; border-right: 3px solid #ebdcc0; }
+    .cake-top { border-radius: 24px 24px 0 0; padding-top: 48px; padding-bottom: 32px; border-top: 3px solid #ebdcc0; }
+    .cake-top::before { content: ""; position: absolute; top: 14px; left: 24px; right: 24px; height: 14px; background-image: radial-gradient(circle at 8% 50%, #ff8a3d 2.5px, transparent 3px), radial-gradient(circle at 22% 50%, #ffb74d 2px, transparent 2.5px), radial-gradient(circle at 36% 50%, #ff8a3d 2px, transparent 2.5px), radial-gradient(circle at 50% 50%, #ffb74d 2.5px, transparent 3px), radial-gradient(circle at 64% 50%, #ff8a3d 2px, transparent 2.5px), radial-gradient(circle at 78% 50%, #ffb74d 2.5px, transparent 3px), radial-gradient(circle at 92% 50%, #ff8a3d 2px, transparent 2.5px); }
+    .cake-bottom { border-radius: 0 0 18px 18px; padding-top: 20px; padding-bottom: 24px; border-bottom: 3px solid #d8c599; }
+    .cake-frosting-thin { height: 14px; background: linear-gradient(180deg, #fdf8ef 0%, #f5ecd9 100%); border-left: 3px solid #ebdcc0; border-right: 3px solid #ebdcc0; margin: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), inset 0 -1px 2px rgba(180, 145, 95, 0.1); }
+    .cake-plate { height: 26px; margin: 0 -28px; background: linear-gradient(180deg, #ffffff 0%, #f5f5f0 60%, #e8e6dd 100%); border-radius: 50% / 100%; box-shadow: 0 10px 26px rgba(99, 60, 24, 0.22), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 3px rgba(255,255,255,0.9); position: relative; margin-top: -2px; z-index: 1; }
+    .cake-plate::before, .cake-plate::after { content: ""; position: absolute; bottom: 6px; width: 5px; height: 5px; border-radius: 50%; background: #d4a574; opacity: 0.6; }
+    .cake-plate::before { left: 18%; }
+    .cake-plate::after { right: 22%; width: 4px; height: 4px; }
+    .cake-goal-eyebrow { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: #c2793b; }
+    .cake-goal-text { font-size: 18px; font-weight: 900; color: #4a2a05; line-height: 1.35; margin-top: 6px; max-width: 640px; }
+    .cake-goal-sub { font-size: 12px; color: #7c5a2a; margin-top: 8px; line-height: 1.5; max-width: 640px; font-style: italic; }
+    .cake-layer { position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;
+      background: linear-gradient(180deg, #f5e3c0 0%, #f0d8ad 24%, #f47b25 28%, #d97a30 38%, #ee8a3d 48%, #f0d8ad 52%, #ecd098 100%);
+      border-left: 3px solid #ebdcc0; border-right: 3px solid #ebdcc0;
+    }
+    .cake-layer:hover { transform: scale(1.005); filter: brightness(1.05) saturate(1.08); }
+    .cake-layer-bar { display: flex; align-items: center; gap: 14px; padding: 22px 26px; color: #4a2a05; position: relative; z-index: 3; }
+    .cake-layer-num { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #ffffff; border: 3px solid #c2793b; font-size: 15px; font-weight: 900; color: #c2793b; flex-shrink: 0; box-shadow: 0 2px 4px rgba(99, 60, 24, 0.18); }
+    .cake-layer-title { flex: 1; font-size: 16px; font-weight: 900; line-height: 1.3; min-width: 0; letter-spacing: -0.2px; color: #3e2105; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+    .cake-layer-meta { font-size: 11px; font-weight: 800; white-space: nowrap; background: rgba(255,255,255,0.85); padding: 4px 10px; border-radius: 999px; color: #c2793b; border: 1.5px solid #c2793b; }
+    .cake-layer-arrow { font-size: 14px; color: #c2793b; transition: transform 0.3s; }
+    .cake-layer-bg { position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background-image:
-        radial-gradient(circle at 8% 18%, #ff8a3d 4px, transparent 5px),
-        radial-gradient(circle at 92% 12%, #ffb74d 3px, transparent 4px),
-        radial-gradient(circle at 18% 88%, #f48fb1 3px, transparent 4px),
-        radial-gradient(circle at 80% 92%, #81c784 3px, transparent 4px),
-        radial-gradient(circle at 50% 6%, #ffd54f 4px, transparent 5px);
+        radial-gradient(circle at 8% 12%, #d4a574 1.5px, transparent 2px),
+        radial-gradient(circle at 24% 16%, #c2793b 1.5px, transparent 2px),
+        radial-gradient(circle at 50% 14%, #d4a574 2px, transparent 2.5px),
+        radial-gradient(circle at 76% 12%, #c2793b 1.5px, transparent 2px),
+        radial-gradient(circle at 92% 16%, #d4a574 2px, transparent 2.5px),
+        radial-gradient(circle at 12% 88%, #c2793b 1.5px, transparent 2px),
+        radial-gradient(circle at 36% 90%, #d4a574 1.5px, transparent 2px),
+        radial-gradient(circle at 62% 86%, #c2793b 2px, transparent 2.5px),
+        radial-gradient(circle at 86% 90%, #d4a574 1.5px, transparent 2px);
+      opacity: 0.6;
     }
-    .cake-stage { display: grid; grid-template-columns: 100px 1fr 100px; gap: 14px; align-items: start; margin-top: 16px; position: relative; z-index: 1; }
-    @media (max-width: 700px) { .cake-stage { grid-template-columns: 1fr; } .cake-side-l, .cake-side-r { display: none; } }
-    .cake-side-l, .cake-side-r { padding-top: 120px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
-    .cake-side-l > *, .cake-side-r > * { animation: bob 4s ease-in-out infinite; }
-    .cake-side-l > *:nth-child(2) { animation-delay: 1s; }
-    .cake-side-r > *:nth-child(2) { animation-delay: 1.5s; }
-    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
-    .cake-stack { display: flex; flex-direction: column; filter: drop-shadow(0 14px 24px rgba(166, 112, 63, 0.25)); }
-    .cake-decorations-row { position: relative; height: 70px; margin-bottom: -22px; z-index: 5; display: flex; justify-content: center; align-items: flex-end; gap: 18px; pointer-events: none; }
-    .cake-deco { font-size: 44px; line-height: 1; transform-origin: bottom center; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15)); animation: wiggle 3.6s ease-in-out infinite; }
-    .cake-deco:nth-child(1) { transform: rotate(-12deg); animation-delay: 0s; }
-    .cake-deco:nth-child(2) { transform: rotate(4deg); font-size: 56px; animation-delay: 0.3s; }
-    .cake-deco:nth-child(3) { transform: rotate(8deg); animation-delay: 0.7s; }
-    .cake-deco:nth-child(4) { transform: rotate(-6deg); font-size: 36px; animation-delay: 1.0s; }
-    .cake-deco:nth-child(5) { transform: rotate(14deg); animation-delay: 1.4s; }
-    @keyframes wiggle { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-4px) rotate(calc(var(--r, 0deg) + 6deg)); } }
-    .cake-frosting { background: linear-gradient(180deg, #fffae0 0%, #faecbb 50%, #f0d488 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; padding: 22px 28px; position: relative; box-shadow: inset 0 3px 5px rgba(255,255,255,0.7), inset 0 -3px 5px rgba(166,112,63,0.12); }
-    .cake-top { border-radius: 50% 50% 10px 10px / 70px 70px 10px 10px; border-top: 4px solid #d4a574; padding-top: 36px; padding-bottom: 26px; position: relative; }
-    .cake-top::before { content: ""; position: absolute; bottom: -8px; left: 0; right: 0; height: 20px;
-      background-image: radial-gradient(circle at 8% 0%, #fffae0 12px, transparent 13px), radial-gradient(circle at 22% 0%, #fffae0 9px, transparent 10px), radial-gradient(circle at 38% 0%, #fffae0 14px, transparent 15px), radial-gradient(circle at 52% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 66% 0%, #fffae0 13px, transparent 14px), radial-gradient(circle at 80% 0%, #fffae0 10px, transparent 11px), radial-gradient(circle at 92% 0%, #fffae0 12px, transparent 13px);
-      filter: drop-shadow(0 2px 1px rgba(166,112,63,0.15));
-    }
-    .cake-bottom { border-radius: 10px 10px 30% 30% / 10px 10px 50px 50px; border-bottom: 5px solid #b87a3f; padding-top: 22px; padding-bottom: 28px; position: relative; }
-    .cake-bottom::after { content: ""; position: absolute; top: -8px; left: 0; right: 0; height: 18px;
-      background-image: radial-gradient(circle at 10% 100%, #fffae0 11px, transparent 12px), radial-gradient(circle at 26% 100%, #fffae0 8px, transparent 9px), radial-gradient(circle at 42% 100%, #fffae0 13px, transparent 14px), radial-gradient(circle at 58% 100%, #fffae0 9px, transparent 10px), radial-gradient(circle at 74% 100%, #fffae0 12px, transparent 13px), radial-gradient(circle at 90% 100%, #fffae0 10px, transparent 11px);
-    }
-    .cake-plate { height: 22px; margin: 0 -16px; background: radial-gradient(ellipse at center, #f8c8d6 0%, #e89aaf 70%, #d77b95 100%); border-radius: 50% / 100%; box-shadow: 0 8px 22px rgba(166, 112, 63, 0.35), inset 0 -3px 6px rgba(0,0,0,0.12), inset 0 2px 4px rgba(255,255,255,0.5); position: relative; z-index: -1; margin-top: -2px; }
-    .cake-frosting-thin { height: 18px; background: linear-gradient(180deg, #fffae0 0%, #f8e4a8 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; margin: -2px 0; box-shadow: inset 0 2px 3px rgba(255,255,255,0.6), inset 0 -2px 3px rgba(166,112,63,0.1); position: relative; }
-    .cake-frosting-thin::before { content: ""; position: absolute; bottom: -10px; left: 0; right: 0; height: 14px;
-      background-image: radial-gradient(circle at 6% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 18% 0%, #fffae0 11px, transparent 12px), radial-gradient(circle at 32% 0%, #fffae0 7px, transparent 8px), radial-gradient(circle at 46% 0%, #fffae0 9px, transparent 10px), radial-gradient(circle at 60% 0%, #fffae0 8px, transparent 9px), radial-gradient(circle at 74% 0%, #fffae0 10px, transparent 11px), radial-gradient(circle at 88% 0%, #fffae0 8px, transparent 9px);
-      filter: drop-shadow(0 1px 1px rgba(166,112,63,0.12));
-    }
-    .cake-goal-eyebrow { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: #d97706; text-shadow: 0 1px 2px rgba(255,255,255,0.6); }
-    .cake-goal-text { font-size: 18px; font-weight: 900; color: #4a2a05; line-height: 1.35; margin-top: 6px; max-width: 720px; }
-    .cake-goal-sub { font-size: 12px; color: #7c5a2a; margin-top: 8px; line-height: 1.5; max-width: 720px; font-style: italic; }
-    .cake-layer { position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; }
-    .cake-layer:hover { transform: scale(1.012); filter: brightness(1.1) saturate(1.15); }
-    .cake-layer-bar { display: flex; align-items: center; gap: 14px; padding: 22px 26px; color: #fff7ec; position: relative; z-index: 3; }
-    .cake-layer-num { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(255,255,255,0.1)); border: 3px solid rgba(255,255,255,0.55); font-size: 16px; font-weight: 900; flex-shrink: 0; text-shadow: 0 2px 3px rgba(0,0,0,0.3); box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.2); }
-    .cake-layer-title { flex: 1; font-size: 16px; font-weight: 900; line-height: 1.3; text-shadow: 0 2px 3px rgba(0,0,0,0.3); min-width: 0; letter-spacing: -0.2px; }
-    .cake-layer-meta { font-size: 12px; font-weight: 700; opacity: 0.95; white-space: nowrap; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 999px; backdrop-filter: blur(2px); }
-    .cake-layer-arrow { font-size: 16px; opacity: 0.95; transition: transform 0.3s; }
-    .cake-layer-bg { position: absolute; inset: 0; z-index: 1; background-image:
-      radial-gradient(circle at 6% 22%, #ff8a3d 4px, transparent 5px),
-      radial-gradient(circle at 14% 65%, #6d4423 3px, transparent 4px),
-      radial-gradient(circle at 24% 30%, #ffb74d 3.5px, transparent 4.5px),
-      radial-gradient(circle at 34% 78%, #8b6347 3px, transparent 4px),
-      radial-gradient(circle at 46% 35%, #ff8a3d 4px, transparent 5px),
-      radial-gradient(circle at 56% 70%, #6d4423 3px, transparent 4px),
-      radial-gradient(circle at 68% 25%, #ffb74d 3.5px, transparent 4.5px),
-      radial-gradient(circle at 78% 60%, #8b6347 3px, transparent 4px),
-      radial-gradient(circle at 88% 35%, #ff8a3d 4px, transparent 5px),
-      radial-gradient(circle at 96% 75%, #6d4423 3px, transparent 4px);
-      pointer-events: none; opacity: 0.85;
-    }
-    .cake-layer-shine { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.12) 100%); }
-    .cake-layer-detail { background: linear-gradient(180deg, #fffbed 0%, #fcf3d8 100%); border-left: 4px solid #d4a574; border-right: 4px solid #d4a574; padding: 22px 26px; }
-    .cake-layer-subtitle { font-size: 12px; color: #7c5a2a; margin-bottom: 14px; font-style: italic; font-weight: 600; }
-    .cake-test { background: white; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; border: 2px solid #e8d394; box-shadow: 0 3px 6px rgba(166, 112, 63, 0.08); cursor: pointer; transition: all 0.2s; }
-    .cake-test:hover { border-color: #ff8a3d; box-shadow: 0 6px 14px rgba(255, 138, 61, 0.18); transform: translateY(-2px); }
-    .cake-test-name { font-size: 15px; font-weight: 900; color: #4a2a05; letter-spacing: -0.2px; }
-    .cake-test-desc { font-size: 12px; color: #4b5563; line-height: 1.55; margin-top: 8px; }
-    .cake-test-criteria { display: none; margin-top: 12px; }
+    .cake-layer-detail { background: #fffaef; border-left: 3px solid #ebdcc0; border-right: 3px solid #ebdcc0; padding: 22px 26px; }
+    .cake-rq { background: linear-gradient(135deg, #fff5e0 0%, #ffe9c2 100%); border-left: 4px solid #f47b25; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+    .cake-rq-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #c2793b; margin-bottom: 6px; }
+    .cake-rq-text { font-size: 14px; font-weight: 700; color: #3e2105; line-height: 1.45; }
+    .cake-iq { background: white; border: 2px solid #ebdcc0; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+    .cake-iq-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; transition: background 0.15s; }
+    .cake-iq-head:hover { background: #fff5e0; }
+    .cake-iq-eyebrow { font-size: 12px; font-weight: 800; color: #4a2a05; }
+    .cake-iq-arrow { font-size: 13px; color: #c2793b; }
+    .cake-iq-list { padding: 0 18px 14px 38px; margin: 0; list-style: disc; color: #5a3417; }
+    .cake-iq-list li { font-size: 13px; line-height: 1.55; margin-bottom: 6px; }
+    .cake-tests-section-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #c2793b; margin-bottom: 10px; padding-top: 4px; }
+    .cake-test { background: white; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid #ebdcc0; box-shadow: 0 2px 4px rgba(99, 60, 24, 0.06); cursor: pointer; transition: all 0.2s; }
+    .cake-test:hover { border-color: #f47b25; box-shadow: 0 4px 12px rgba(244, 123, 37, 0.15); transform: translateY(-1px); }
+    .cake-test-name { font-size: 14px; font-weight: 800; color: #3e2105; letter-spacing: -0.2px; }
+    .cake-test-desc { font-size: 12px; color: #4b5563; line-height: 1.55; margin-top: 6px; }
+    .cake-test-criteria { display: none; margin-top: 10px; }
     .cake-test.expanded .cake-test-criteria { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-    .cake-test-toggle { display: inline-block; font-size: 11px; font-weight: 800; color: #d97706; margin-top: 10px; text-transform: uppercase; letter-spacing: 1.2px; }
+    .cake-test-toggle { display: inline-block; font-size: 11px; font-weight: 800; color: #c2793b; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.2px; }
     .cake-test:hover .cake-test-toggle { color: #ea580c; }
-    .cake-side-svg { width: 70px; height: auto; }
-    .cake-walnut-svg { width: 36px; height: 36px; }
-    .cake-emoji-side { font-size: 50px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(166,112,63,0.3)); }
+    @media (max-width: 700px) { .cake-stack { max-width: 100%; } }
   </style>
 </head>
 <body>
@@ -409,8 +394,14 @@ const CAKE_LAYERS = [
     id: "safe",
     title: "Operates safely for subjects, rescuers, and environment",
     short: "Operates safely",
-    sponge: "#c08552", // top of layer
-    sponge_dark: "#a6703f", // bottom of layer
+    sponge: "#c08552",
+    sponge_dark: "#a6703f",
+    research_question: "How can a drone-assisted micro-aid delivery system be designed and operated safely for stranded hikers, rescuers, and the surrounding environment?",
+    inquiry_questions: [
+      "What are the main operational risks involved in flying drones in alpine rescue environments?",
+      "How could risks such as crashes, missed drops, weather failure, or interference with rescue teams be reduced?",
+      "What safety procedures, training requirements, and emergency protocols would be needed before deployment?"
+    ],
     tests: [
       {
         name: "Risk assessment matrix",
@@ -448,6 +439,12 @@ const CAKE_LAYERS = [
     short: "Compliant with NZ CAA + Police UAV policy",
     sponge: "#bb7a4e",
     sponge_dark: "#965f3a",
+    research_question: "How can a drone-assisted micro-aid delivery system operate legally and realistically within New Zealand's aviation and emergency-response regulations?",
+    inquiry_questions: [
+      "What are the key Civil Aviation Authority requirements under Part 101, and when would Part 102 be needed for this project?",
+      "What permissions or partnerships would be required from local stakeholders such as SAR teams, DOC, QLDC, or airspace authorities?",
+      "What legal limitations could affect autonomous flight, beyond-visual-line-of-sight operations, or payload drops in alpine environments?"
+    ],
     tests: [
       {
         name: "Meet with NZSAR Secretariat",
@@ -485,6 +482,12 @@ const CAKE_LAYERS = [
     short: "Endorsed by LandSAR, Police, Queenstown community",
     sponge: "#a16e3f",
     sponge_dark: "#82542d",
+    research_question: "Who are the most important stakeholders in a drone-assisted alpine rescue system, and what does each group need from the solution for it to succeed?",
+    inquiry_questions: [
+      "Which stakeholders would directly use, approve, fund, or be affected by the system?",
+      "What concerns, priorities, and success criteria do SAR teams, local government, and outdoor users have?",
+      "How could collaboration between these groups improve adoption, trust, and long-term implementation?"
+    ],
     tests: [
       {
         name: "Queenstown community survey",
@@ -522,6 +525,12 @@ const CAKE_LAYERS = [
     short: "Financially viable",
     sponge: "#a87749",
     sponge_dark: "#86552f",
+    research_question: "What would it cost to develop, test, and potentially implement a drone-assisted micro-aid delivery programme in the Queenstown region?",
+    inquiry_questions: [
+      "What are the estimated start-up costs for drones, payload systems, software, training, maintenance, and compliance?",
+      "How do these costs compare with the potential benefits, such as faster response times or reduced pressure on rescue resources?",
+      "What funding models, sponsorships, or public-private partnerships could make the programme financially viable?"
+    ],
     tests: [
       {
         name: "Cost-benefit analysis vs helicopter-only",
@@ -559,6 +568,12 @@ const CAKE_LAYERS = [
     short: "Technically proven for alpine SAR",
     sponge: "#9a6638",
     sponge_dark: "#7a4f29",
+    research_question: "How effective and practical would drone technology be for delivering micro-aid to stranded hikers before rescuers arrive?",
+    inquiry_questions: [
+      "What drone platform, payload design, and delivery method would be most suitable for alpine SAR scenarios?",
+      "How would weather, terrain, signal strength, battery life, and payload weight affect performance?",
+      "To what extent could the system meaningfully reduce response delays or improve survival outcomes in real emergencies?"
+    ],
     tests: [
       {
         name: "Joint POD trial with Wanaka SAR",
@@ -1028,6 +1043,7 @@ function App() {
   const [openOQ, setOpenOQ] = useState(null);
   const [openLayer, setOpenLayer] = useState(null);
   const [openTest, setOpenTest] = useState(null);
+  const [openIQ, setOpenIQ] = useState(null);
   const [today, setToday] = useState(() => new Date().toISOString().slice(0, 10));
   const [openDay, setOpenDay] = useState(null);
   const [recording, setRecording] = useState(false);
@@ -1483,18 +1499,30 @@ function App() {
               <p style={{ fontSize: 13, color: "#7c5a2a", marginTop: 6, maxWidth: 800, lineHeight: 1.6 }}>Each layer of the carrot cake is a specific, outcome-named pillar of the project. Click any layer to see four diverse testing methods. Click any test to see Achieved / Merit / Excellence criteria. The frosting at top and bottom is the goal — every layer must hold the cake up.</p>
             </div>
             <div className="cake-stage">
-              <div className="cake-side-l">
-                <span className="cake-emoji-side">🥕</span>
-                <span className="cake-emoji-side">🍯</span>
-                <span className="cake-emoji-side">🌟</span>
-              </div>
               <div className="cake-stack">
-                <div className="cake-decorations-row">
-                  <span className="cake-deco">🥜</span>
-                  <span className="cake-deco">🥕</span>
-                  <span className="cake-deco">🥥</span>
-                  <span className="cake-deco">🌿</span>
-                  <span className="cake-deco">🥜</span>
+                <div className="cake-carrot-top">
+                  <svg className="cake-carrot-svg" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+                    {/* Leafy green tops */}
+                    <g fill="#5dac3a" stroke="#3f7028" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round">
+                      <path d="M55,42 L40,8 L46,22 L34,12 L42,28 L48,18 L52,32 Z" />
+                      <path d="M55,42 L56,5 L62,18 L58,8 L60,28 Z" />
+                      <path d="M55,42 L78,10 L70,22 L82,16 L72,32 L66,22 Z" />
+                    </g>
+                    {/* Carrot body */}
+                    <ellipse cx="55" cy="80" rx="28" ry="38" fill="#f47b25" stroke="#c2551a" strokeWidth="3" />
+                    {/* Highlight stripes */}
+                    <path d="M37,68 Q42,68 47,68" stroke="#e56a15" strokeWidth="2" strokeLinecap="round" fill="none" />
+                    <path d="M65,90 Q70,90 75,90" stroke="#e56a15" strokeWidth="2" strokeLinecap="round" fill="none" />
+                    <path d="M40,100 Q45,100 50,100" stroke="#e56a15" strokeWidth="2" strokeLinecap="round" fill="none" />
+                    {/* Eyes */}
+                    <circle cx="46" cy="74" r="2.5" fill="#3a1f0c" />
+                    <circle cx="64" cy="74" r="2.5" fill="#3a1f0c" />
+                    {/* Cheek blush */}
+                    <ellipse cx="40" cy="84" rx="4" ry="2.5" fill="#ff9a5b" opacity="0.6" />
+                    <ellipse cx="70" cy="84" rx="4" ry="2.5" fill="#ff9a5b" opacity="0.6" />
+                    {/* Smile */}
+                    <path d="M45,85 Q55,93 65,85" stroke="#3a1f0c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                  </svg>
                 </div>
                 <div className="cake-frosting cake-top">
                   <div className="cake-goal-eyebrow">🎯 The Goal</div>
@@ -1517,7 +1545,22 @@ function App() {
                       </div>
                       {isOpen && (
                         <div className="cake-layer-detail">
-                          <p className="cake-layer-subtitle">Click any testing method to reveal Achieved / Merit / Excellence criteria.</p>
+                          <div className="cake-rq">
+                            <div className="cake-rq-eyebrow">📋 Research Question</div>
+                            <p className="cake-rq-text">{layer.research_question}</p>
+                          </div>
+                          <div className="cake-iq">
+                            <div className="cake-iq-head" onClick={(ev) => { ev.stopPropagation(); setOpenIQ(openIQ === layer.id ? null : layer.id); }}>
+                              <span className="cake-iq-eyebrow">❓ Inquiry questions ({layer.inquiry_questions.length})</span>
+                              <span className="cake-iq-arrow">{openIQ === layer.id ? "▲" : "▼"}</span>
+                            </div>
+                            {openIQ === layer.id && (
+                              <ul className="cake-iq-list">
+                                {layer.inquiry_questions.map((q, i) => <li key={i}>{q}</li>)}
+                              </ul>
+                            )}
+                          </div>
+                          <div className="cake-tests-section-label">🔬 Testing methods — click any to reveal Achieved / Merit / Excellence</div>
                           {layer.tests.map((test, ti) => {
                             const testKey = layer.id + ":" + ti;
                             const tIsOpen = openTest === testKey;
@@ -1545,11 +1588,6 @@ function App() {
                   <div className="cake-goal-text">The same goal — anchored. The proposal lands in Parliament; the capability lands in the Wakatipu basin; lives are saved that would otherwise have been lost.</div>
                 </div>
                 <div className="cake-plate" />
-              </div>
-              <div className="cake-side-r">
-                <span className="cake-emoji-side">🥜</span>
-                <span className="cake-emoji-side">✨</span>
-                <span className="cake-emoji-side">🍰</span>
               </div>
             </div>
             <div style={{ textAlign: "center", marginTop: 24, fontSize: 11, color: "#a07a3a", fontStyle: "italic" }}>The criteria embedded in this cake replace the earlier flat SMART list — they are deliberately specific, action-oriented, and grounded in the methods you can actually run.</div>
