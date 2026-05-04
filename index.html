@@ -1049,6 +1049,10 @@ function App() {
   const [recording, setRecording] = useState(false);
   const [interimText, setInterimText] = useState("");
   const recognitionRef = useRef(null);
+  const [invReflection, setInvReflection] = useState({ raw: "", synthesis: "" });
+  const [invRecording, setInvRecording] = useState(false);
+  const [invInterimText, setInvInterimText] = useState("");
+  const invRecognitionRef = useRef(null);
   const [active, setActive] = useState(null);
   const [copied, setCopied] = useState(false);
   const [syncStatus, setSyncStatus] = useState("connecting"); // connecting | live | saving | error
@@ -1096,6 +1100,7 @@ function App() {
         return;
       }
       const c = {}, a = {}, s = [], ex = [], sc = [], refl = {}, td = {}, ev = [];
+      let invR = null;
       for (const row of data || []) {
         if (row.key.startsWith("c:")) c[row.key.slice(2)] = !!row.value;
         else if (row.key.startsWith("a:")) a[row.key.slice(2)] = row.value;
@@ -1104,6 +1109,7 @@ function App() {
         else if (row.key.startsWith("sc:")) sc.push({ id: row.key.slice(3), ...row.value });
         else if (row.key.startsWith("ap:")) refl[row.key.slice(3)] = row.value;
         else if (row.key.startsWith("iv:")) ev.push({ id: row.key.slice(3), ...row.value });
+        else if (row.key === "ir:main") invR = row.value;
         else if (row.key.startsWith("td:")) {
           const rest = row.key.slice(3);
           const colon = rest.indexOf(":");
@@ -1123,6 +1129,7 @@ function App() {
       setReflections(refl);
       setTasks(td);
       setEvidence(ev);
+      if (invR && typeof invR === "object") setInvReflection({ raw: invR.raw || "", synthesis: invR.synthesis || "" });
       setSyncStatus("live");
     })();
   }, []);
@@ -1144,6 +1151,7 @@ function App() {
           else if (k.startsWith("sc:")) setCriteria(p => p.filter(x => x.id !== k.slice(3)));
           else if (k.startsWith("iv:")) setEvidence(p => p.filter(x => x.id !== k.slice(3)));
           else if (k.startsWith("ap:")) setReflections(p => { const n = { ...p }; delete n[k.slice(3)]; return n; });
+          else if (k === "ir:main") setInvReflection({ raw: "", synthesis: "" });
           else if (k.startsWith("td:")) {
             const rest = k.slice(3);
             const colon = rest.indexOf(":");
@@ -1181,6 +1189,7 @@ function App() {
             return next;
           });
           else if (k.startsWith("ap:")) setReflections(p => ({ ...p, [k.slice(3)]: row.value }));
+          else if (k === "ir:main") setInvReflection({ raw: (row.value && row.value.raw) || "", synthesis: (row.value && row.value.synthesis) || "" });
           else if (k.startsWith("td:")) {
             const rest = k.slice(3);
             const colon = rest.indexOf(":");
@@ -1314,6 +1323,49 @@ function App() {
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; }
     setRecording(false);
     setInterimText("");
+  };
+  const saveInvReflection = (field, value) => {
+    setInvReflection(prev => {
+      const next = { ...prev, [field]: value, updatedAt: new Date().toISOString() };
+      const isEmpty = !next.raw && !next.synthesis;
+      if (isEmpty) {
+        immediateWrite("ir:main", null, true);
+      } else {
+        scheduleWrite("ir:main", next);
+      }
+      return next;
+    });
+  };
+  const startInvRecording = () => {
+    const recognition = getSpeechRecognition();
+    if (!recognition) { alert("Voice recording not supported in this browser. Please use Chrome, Edge, or Safari."); return; }
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-NZ";
+    let finalTranscript = (invReflection && invReflection.raw) || "";
+    recognition.onresult = (event) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          finalTranscript = (finalTranscript ? finalTranscript + " " : "") + result[0].transcript.trim();
+          saveInvReflection("raw", finalTranscript);
+        } else {
+          interim += result[0].transcript;
+        }
+      }
+      setInvInterimText(interim);
+    };
+    recognition.onerror = (e) => { console.error("[speech-iv]", e.error); setInvRecording(false); };
+    recognition.onend = () => { setInvRecording(false); setInvInterimText(""); };
+    recognition.start();
+    invRecognitionRef.current = recognition;
+    setInvRecording(true);
+  };
+  const stopInvRecording = () => {
+    if (invRecognitionRef.current) { invRecognitionRef.current.stop(); invRecognitionRef.current = null; }
+    setInvRecording(false);
+    setInvInterimText("");
   };
   const toggleSec = id => setExpanded(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const openPanel = (section, item) => { setActive({ section, item }); setCopied(false); };
@@ -1626,6 +1678,37 @@ function App() {
                   <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, maxWidth: 720 }}>Evidence of the research methods, expert interactions, and question pivots that drove this Investigation phase. The bucket fills as you add evidence; deadline May 6.</p>
                 </div>
                 <button className="btn btn-primary" onClick={() => setEditingEvidence({ category: "interview", title: "", date: new Date().toISOString().slice(0, 10), source: "", notes: "", link: "" })}>+ Add evidence</button>
+              </div>
+              {/* Investigation Phase Reflection */}
+              <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 12, padding: 18, marginBottom: 18, boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 12 }}>
+                  <div>
+                    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#111827", margin: 0 }}>📝 Investigation Phase Reflection</h3>
+                    <p style={{ fontSize: 12, color: "#6b7280", marginTop: 4, maxWidth: 640 }}>Final-day reflection on the Investigation phase. Record yourself speaking, then transcribe + synthesise. Both the raw transcript and the polished synthesis are saved.</p>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <button className={"voice-btn " + (invRecording ? "recording" : "idle")} onClick={() => invRecording ? stopInvRecording() : startInvRecording()}>
+                      {invRecording ? "■ Stop" : "🎤 Record reflection"}
+                    </button>
+                    <span style={{ fontSize: 11, color: "#6b7280" }}>{invRecording ? "Listening… speak naturally" : "Browser-based transcription"}</span>
+                  </div>
+                </div>
+                <div className="field">
+                  <label className="field-label">Raw recording / transcript</label>
+                  <textarea className="field-textarea" rows={5} value={(invReflection && invReflection.raw) || ""} onChange={ev => saveInvReflection("raw", ev.target.value)} placeholder="Hit Record above and start speaking — your voice will transcribe here. You can also type or paste raw notes." />
+                  {invInterimText && (<div style={{ fontStyle: "italic", color: "#9ca3af", fontSize: 12, marginTop: 4 }}>{invInterimText}</div>)}
+                </div>
+                <div className="field" style={{ marginTop: 10 }}>
+                  <label className="field-label">Synthesis (the polished version)</label>
+                  <textarea className="field-textarea" rows={5} value={(invReflection && invReflection.synthesis) || ""} onChange={ev => saveInvReflection("synthesis", ev.target.value)} placeholder="Once you have a raw recording, synthesise it here — what you investigated, what shifted, where the project goes next." />
+                </div>
+                {invReflection && invReflection.raw && (
+                  <button className="btn btn-outline" style={{ marginTop: 10 }} onClick={() => {
+                    const prompt = "Please synthesise this raw Investigation-phase reflection into a single dense, polished paragraph for Alexander's Liger Impact Project portfolio. Capture: (1) what was investigated and why, (2) what shifted in the thinking and which evidence drove the shifts, (3) where the project goes next now that Taking Action is starting and Johnny Franklin will be initiating the proposal himself.\n\n" + invReflection.raw;
+                    navigator.clipboard.writeText(prompt);
+                    alert("Copied to clipboard. Paste into Claude chat for synthesis, then drop the result back into the Synthesis field.");
+                  }}>📋 Copy raw transcript for Claude synthesis</button>
+                )}
               </div>
               {/* Bucket animation + grade banner */}
               <div className="bucket-stage">
